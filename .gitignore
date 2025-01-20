@@ -1,0 +1,16 @@
+# Root level .gitignore
+# Node
+node_modules/
+.next/
+.env
+
+# Java
+*.class
+*.jar
+*.war
+target/
+.idea/
+*.iml
+.settings/
+.classpath
+.project
