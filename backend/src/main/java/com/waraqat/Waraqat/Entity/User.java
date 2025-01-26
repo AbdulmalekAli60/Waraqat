@@ -3,9 +3,10 @@ package com.waraqat.Waraqat.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -30,8 +31,28 @@ public class User {
     @Column(name = "profileImage", columnDefinition = "VARCHAR(255)")
     private String profileImage;
 
-    @Column(name = "createdAt")
-    private Timestamp createdAt;
+    @Column(name = "created_at")
+    private Timestamp created_at;
+
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> follower;
+
+    @OneToMany(mappedBy = "following")
+    private Set<Follow> following;
+
+    public User() {
+    }
+
+    public User(Long id, String name, String username, String email, String password, String bio, String profileImage, Timestamp created_at) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.bio = bio;
+        this.profileImage = profileImage;
+        this.created_at = created_at;
+    }
 
     public Long getId() {
         return id;
@@ -90,11 +111,11 @@ public class User {
     }
 
     public Timestamp getCreatedAt() {
-        return createdAt;
+        return created_at;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+        this.created_at = createdAt;
     }
 
     @Override
@@ -107,7 +128,9 @@ public class User {
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", profileImage='" + profileImage + '\'' +
-                ", createdAt=" + createdAt +
+                ", created_at=" + created_at +
+                ", follower=" + follower +
+                ", following=" + following +
                 '}';
     }
 }
