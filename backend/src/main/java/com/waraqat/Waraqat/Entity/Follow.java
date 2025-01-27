@@ -12,7 +12,7 @@ public class Follow {
     private FollowCompositeKey primaryKey;
 
     @ManyToOne
-    @MapsId("followerId")
+    @MapsId("followerId") // to the composite key
     @JoinColumn(name = "follower_id")
     private User follower;
 

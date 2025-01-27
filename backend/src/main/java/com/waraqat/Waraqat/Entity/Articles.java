@@ -28,6 +28,15 @@ public class Articles {
     @JoinColumn(name = "category_id")
     private Categories category;
 
+    @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+    private Set<BookMarks> bookMarks = new HashSet<>();
+
+    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
+    private Set<ArticleImages> articleImages = new HashSet<>();
+
+    @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Comments> comments = new HashSet<>();
+
     @Column(name = "claps_count")
     private Long clapsCount;
 

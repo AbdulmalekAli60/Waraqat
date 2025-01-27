@@ -3,6 +3,7 @@ package com.waraqat.Waraqat.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,16 +36,22 @@ public class User {
     private Timestamp created_at;
 
     @OneToMany(mappedBy = "follower" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Follow> follower;
+    private Set<Follow> follower = new HashSet<>();
 
     @OneToMany(mappedBy = "following",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Follow> following;
+    private Set<Follow> following = new HashSet<>();
+
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL)
+    private Set<UserSocialMedia> userSocialMedia = new HashSet<>();
 
     @OneToMany(mappedBy = "user" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<UserSocialMedia> userSocialMedia;
+    private Set<Articles> articles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Articles> articles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<BookMarks> bookMarks = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private  Set<Comments> comments = new HashSet<>();
 
     public User() {
     }
