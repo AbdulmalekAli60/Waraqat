@@ -9,11 +9,16 @@ import java.sql.Timestamp;
 public class Follow {
 
     @EmbeddedId
-    private FollowCompositeKey primaryKey; // in repo use this type
+    private FollowCompositeKey primaryKey;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @MapsId("followerId")
+    @JoinColumn(name = "follower_id")
     private User follower;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne
+    @MapsId("followingId")
+    @JoinColumn(name = "following_id")
     private User following;
 
     @Column(name = "created_at")

@@ -2,6 +2,8 @@ package com.waraqat.Waraqat.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,45 +11,45 @@ import java.util.Objects;
 @Embeddable
 public class FollowCompositeKey implements Serializable {
 
+//    @ManyToOne
     @Column(name = "follower_id",nullable = false) // who follow me
-    private User follower_id;
+    private Long followerId;
 
+//    @ManyToOne
     @Column(name = "following_id",nullable = false) // who I follow
-    private User following_id;
+    private Long followingId;
 
     public FollowCompositeKey() {
     }
 
-    public FollowCompositeKey(User follower_id, User following_id) {
-        this.follower_id = follower_id;
-        this.following_id = following_id;
+    public FollowCompositeKey(Long followerId, Long followingId) {
+        this.followerId = followerId;
+        this.followingId = followingId;
     }
 
-    public User getFollowing_id() {
-        return following_id;
+    public Long getFollowerId() {
+        return followerId;
     }
 
-    public void setFollowing_id(User following_id) {
-        this.following_id = following_id;
+    public void setFollowerId(Long followerId) {
+        this.followerId = followerId;
     }
 
-    public User getFollower_id() {
-        return follower_id;
+    public Long getFollowingId() {
+        return followingId;
     }
 
-    public void setFollower_id(User follower_id) {
-        this.follower_id = follower_id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        FollowCompositeKey that = (FollowCompositeKey) o;
-        return Objects.equals(follower_id, that.follower_id) && Objects.equals(following_id, that.following_id);
+    public void setFollowingId(Long followingId) {
+        this.followingId = followingId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(follower_id, following_id);
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
