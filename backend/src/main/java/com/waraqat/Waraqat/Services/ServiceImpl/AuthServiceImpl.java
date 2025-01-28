@@ -7,17 +7,19 @@ import com.waraqat.Waraqat.Repository.UserRepo;
 import com.waraqat.Waraqat.Services.AuthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepo userRepo;
     private final ModelMapper modelMapper;
 
-    @Autowired
+
     public AuthServiceImpl(final UserRepo userRepo,final ModelMapper mapper) {
         this.userRepo = userRepo;
         this.modelMapper = mapper;
@@ -26,18 +28,18 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDTO signup(UserDTO userDTO) {
 
-        if(userRepo.existByEmail(userDTO.getEmail())){
+        if(userRepo.existsByEmail(userDTO.getEmail())){
             throw new UsernameAlreadyexist("Email is already used before");
         }
 
-        if(userRepo.findByUserName(userDTO.getUsername()) != null){
+        if(userRepo.findByusername(userDTO.getUsername()) != null){
             throw new UsernameAlreadyexist("Username is used");
         }
 
         User newUser = new User(
                 userDTO.getName(),
-                userDTO.getUsername(),
-                userDTO.getEmail(),
+                "@".concat(userDTO.getUsername().trim()),
+                userDTO.getEmail().trim(),
                 userDTO.getPassword(),
                 getRandomProfileImage()
         );

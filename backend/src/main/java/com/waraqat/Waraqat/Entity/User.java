@@ -29,7 +29,7 @@ public class User {
     @Column(name = "bio" ,columnDefinition = "VARCHAR(255)")
     private String bio; // null
 
-    @Column(name = "profileImage", columnDefinition = "VARCHAR(255)")
+    @Column(name = "profileImage", columnDefinition = "TEXT")
     private String profileImage;
 
     @Column(name = "created_at")
