@@ -33,7 +33,7 @@ public class User {
     private String profileImage;
 
     @Column(name = "created_at")
-    private Timestamp created_at;
+    private Timestamp created_at = new Timestamp(System.currentTimeMillis());
 
     @OneToMany(mappedBy = "follower" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Follow> follower = new HashSet<>();
@@ -69,6 +69,14 @@ public class User {
         this.following = following;
         this.userSocialMedia = userSocialMedia;
         this.articles = articles;
+    }
+
+    public User(String name, String username, String email, String password,String profileImage) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profileImage = profileImage;
     }
 
     public Long getId() {
