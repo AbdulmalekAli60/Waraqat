@@ -24,28 +24,28 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorDTO> userNotFound(UserNotFoundException ex){
-        ErrorDTO error = new ErrorDTO(
-                ex.getMessage(),
-                ex.getTime()
+    public ResponseEntity<ErrorResponse> userNotFound(UserNotFoundException ex){
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage()
+//                ex.getTime()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameAlreadyexist.class)
-    public ResponseEntity<ErrorDTO> userNotFound(UsernameAlreadyexist ex){
-        ErrorDTO error = new ErrorDTO(
-                ex.getMessage(),
-                ex.getTime()
+    public ResponseEntity<ErrorResponse> userNotFound(UsernameAlreadyexist ex){
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage()
+//                ex.getTime()
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(EmailAlreadyUsed.class)
-    public ResponseEntity<ErrorDTO> userNotFound(EmailAlreadyUsed ex){
-        ErrorDTO error = new ErrorDTO(
-                ex.getMessage(),
-                ex.getTime()
+    public ResponseEntity<ErrorResponse> userNotFound(EmailAlreadyUsed ex){
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage()
+//                ex.getTime()
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }

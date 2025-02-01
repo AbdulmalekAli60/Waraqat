@@ -2,13 +2,12 @@ package com.waraqat.Waraqat.exceptions;
 
 import java.sql.Timestamp;
 
-public class ErrorDTO {
+public class ErrorResponse {
     private String message;
-    private Timestamp time;
+    private Timestamp time = new Timestamp(System.currentTimeMillis());
 
-    public ErrorDTO(String message, Timestamp time) {
+    public ErrorResponse(String message) {
         this.message = message;
-        this.time = time;
     }
 
     public String getMessage() {
