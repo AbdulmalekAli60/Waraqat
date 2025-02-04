@@ -2,11 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
-* {
-    overflow:hidden;
-}
-
+ * {
+  scrollbar-width: thin;
+  
+ }
 
 @layer base {
   :root {

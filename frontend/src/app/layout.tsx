@@ -18,9 +18,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <nav className="bg-teal-700 flex justify-around items-center h-14 p-2">
-
           <div className=" w-1/2 ml-10 text-white ">
-          <h1 className="font-bold text-4xl">Waraqat</h1>
+            <Link href={"/"}>
+              <h1 className="font-bold text-4xl">Waraqat</h1>
+            </Link>
           </div>
           {/* Button container */}
           <div className="w-1/2  flex justify-end gap-2 mr-10">
