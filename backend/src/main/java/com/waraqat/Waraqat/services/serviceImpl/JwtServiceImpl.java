@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
@@ -32,6 +33,7 @@ public class JwtServiceImpl implements JwtService {
         Date expireDate = new Date(currentDate.getTime() + JWTExpiration);
 
         String token = Jwts.builder()
+                .setHeader(Map.of("typ","JWT"))
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)

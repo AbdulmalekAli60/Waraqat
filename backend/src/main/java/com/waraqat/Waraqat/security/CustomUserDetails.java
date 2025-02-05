@@ -28,7 +28,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername() { // we are using the email to in the token
         return this.user.getEmail();
     }
 

@@ -28,7 +28,7 @@ import java.util.Arrays;
 @EnableWebSecurity // includes @Configuration
 public class SecurityConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+//    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtFilter jwtFilter;
