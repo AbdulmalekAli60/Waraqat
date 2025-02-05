@@ -13,12 +13,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-interface registerDataInterface {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-}
+import { registerDataInterface } from "@/Interfaces/AuthInterfaces";
+import { register } from "@/services/authService";
+import { LoaderCircle } from "lucide-react";
 export default function Register() {
   const [registerData, setRegisterData] = useState<registerDataInterface>({
     name: "",
@@ -26,6 +23,8 @@ export default function Register() {
     email: "",
     password: "",
   });
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
   //event handlers
@@ -38,15 +37,26 @@ export default function Register() {
     }));
   }
 
-  function handleRegisterFormSubmit(e: React.FormEvent) {
+  async function handleRegisterFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log(registerData);
-    router.push("/articles")
+    setIsLoading(true);
+    try {
+      const response = await register(registerData);
+      sessionStorage.setItem("token", response.data.jwtToken);
+      console.log(response);
+      // show alert
+      router.push("/articles");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
+
   //event handlers
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className=" flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 pb-4">
           <div className="flex items-center justify-center">
@@ -61,8 +71,8 @@ export default function Register() {
         </CardHeader>
         <CardContent>
           {/* form */}
-          <form onSubmit={handleRegisterFormSubmit} className="space-y-2">
-            <div className="space-y-2">
+          <form onSubmit={handleRegisterFormSubmit} className="">
+            <div className="">
               <Label htmlFor="name">First Name</Label>
               <Input
                 placeholder="Mohammed"
@@ -72,9 +82,10 @@ export default function Register() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
             </div>
 
-            <div className="space-y-1">
+            <div className="">
               <Label htmlFor="username">Username</Label>
               <Input
                 placeholder="@Mohammed"
@@ -84,9 +95,10 @@ export default function Register() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
             </div>
 
-            <div className="space-y-2">
+            <div className="">
               <Label htmlFor="email">Email</Label>
               <Input
                 placeholder="mohammed@example.com"
@@ -96,6 +108,7 @@ export default function Register() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
             </div>
 
             <div className="space-y-2">
@@ -107,11 +120,14 @@ export default function Register() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
             </div>
 
-            <Button className="w-full" type="submit">
-              Create Account
-            </Button>
+            <div className="mt-5">
+              <Button className="w-full" type="submit" disabled={isLoading}>
+                {isLoading ? <LoaderCircle /> : "Create Account"}
+              </Button>
+            </div>
           </form>
           {/*=== form === */}
         </CardContent>

@@ -8,30 +8,37 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { UserPlus } from "lucide-react";
+import { LogIn, LoaderCircle } from "lucide-react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-
-interface signInDataInterface {
-  email: string;
-  password: string;
-}
-
+import { signInDataInterface } from "@/Interfaces/AuthInterfaces";
+import { login } from "@/services/authService";
 export default function Signin() {
   const [signInData, setSignInData] = useState<signInDataInterface>({
     email: "",
     password: "",
   });
 
-  const router  = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   //event handlers
-  function handleRegisterFormSubmit(e: React.FormEvent) {
+  async function handleLogInFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    alert(signInData.email + signInData.password);
-    router.push("articles");
+    setIsLoading(true);
+    try {
+      const response = await login(signInData);
+      sessionStorage.setItem("token", response.data.jwtToken);
+      // show alert
+      router.push("articles");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,18 +56,18 @@ export default function Signin() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 pb-4">
           <div className="flex items-center justify-center">
-            <UserPlus className="h-12 w-12 text-primary mb-2" />
+            <LogIn className="h-12 w-12 text-primary mb-2" />
           </div>
           <CardTitle className="text-2xl font-bold text-center">
-            Create an Account
+            Log in
           </CardTitle>
           <CardDescription className="text-center">
-            Join our platform!
+            Welcome Back!
           </CardDescription>
         </CardHeader>
         <CardContent>
           {/* form */}
-          <form onSubmit={handleRegisterFormSubmit} className="space-y-2">
+          <form onSubmit={handleLogInFormSubmit} className="space-y-2">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -71,6 +78,8 @@ export default function Signin() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
+
             </div>
 
             <div className="space-y-2">
@@ -82,11 +91,19 @@ export default function Signin() {
                 onChange={handleChange}
                 className="w-full"
               />
+              <span className="text-red-600">askda</span>
+
             </div>
 
-            <Button className="w-full" type="submit">
-              Create Account
-            </Button>
+            <div className="mt-5">
+              <Button
+                className="w-full mt-5"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoaderCircle /> : "Log in"}
+              </Button>
+            </div>
           </form>
           {/*=== form === */}
         </CardContent>
