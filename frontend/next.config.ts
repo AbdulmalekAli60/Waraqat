@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'miro.medium.com',
+        // search: '?v=1727111025337',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

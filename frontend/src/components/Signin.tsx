@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { signInDataInterface } from "@/Interfaces/AuthInterfaces";
 import { login } from "@/services/authService";
+import { useUserInfo } from "@/context/UserContext";
 export default function Signin() {
   const [signInData, setSignInData] = useState<signInDataInterface>({
     email: "",
@@ -24,16 +25,32 @@ export default function Signin() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
-
+  const { userData,setUserData } = useUserInfo();
+  useEffect(() => {
+    console.log("Updated user data:", userData);
+  }, [userData]);
   //event handlers
   async function handleLogInFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
+    console.log(signInData.password)
     try {
       const response = await login(signInData);
-      sessionStorage.setItem("token", response.data.jwtToken);
+
+      sessionStorage.setItem("token", response.data.accessToken);
+      console.log(response.data);
+      const responseData = response.data.userData;
+      setUserData({
+        ...userData,
+        id: responseData.id,
+        username: responseData.username,
+        bio: responseData.bio,
+        profileImage: responseData.profileImage,
+        created_at: responseData.created_at,
+      });
+      // console.log("user data from sign in: ",userData);
       // show alert
-      router.push("articles");
+      // router.push("articles");
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,7 +96,6 @@ export default function Signin() {
                 className="w-full"
               />
               <span className="text-red-600">askda</span>
-
             </div>
 
             <div className="space-y-2">
@@ -92,7 +108,6 @@ export default function Signin() {
                 className="w-full"
               />
               <span className="text-red-600">askda</span>
-
             </div>
 
             <div className="mt-5">

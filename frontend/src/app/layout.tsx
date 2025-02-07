@@ -1,4 +1,5 @@
 "use client";
+import { UserContextProvider } from "@/context/UserContext";
 // import SignedInUserLayOut from "./articles/layout";
 // import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <UserContextProvider>{children}</UserContextProvider>
+      </body>
     </html>
   );
 }

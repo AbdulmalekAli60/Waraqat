@@ -22,7 +22,7 @@ export default function AvatarDropDown() {
     sessionStorage.removeItem("token");
     sessionStorage.clear();
     localStorage.clear();
-    router.push("/");
+    router.push("/public");
   }
   // event handlers
 

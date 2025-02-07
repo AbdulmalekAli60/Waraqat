@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import {
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { registerDataInterface } from "@/Interfaces/AuthInterfaces";
 import { register } from "@/services/authService";
 import { LoaderCircle } from "lucide-react";
+import { useUserInfo } from "@/context/UserContext";
 export default function Register() {
   const [registerData, setRegisterData] = useState<registerDataInterface>({
     name: "",
@@ -27,6 +28,12 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  const { userData, setUserData } = useUserInfo();
+  
+
+  useEffect(() => {
+    console.log("register user data:", userData);
+  }, [userData]);
   //event handlers
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -44,8 +51,17 @@ export default function Register() {
       const response = await register(registerData);
       sessionStorage.setItem("token", response.data.jwtToken);
       console.log(response);
+      const responseData = response.data.userData;
+      setUserData({
+        id: responseData.id,
+        username: responseData.username,
+        bio: responseData.bio,
+        profileImage: responseData.profileImage,
+        created_at: responseData.created_at,
+      });
+      // console.log("user data from register: " , userData)
       // show alert
-      router.push("/articles");
+      // router.push("/articles");
     } catch (error) {
       console.error(error);
     } finally {

@@ -7,9 +7,9 @@ export default function HomeNav() {
   const router = useRouter();
   return (
     <>
-      <nav className=" flex justify-around items-center h-14 p-2">
+      <nav className=" flex justify-around items-center h-14 p-2 border border-black">
         <div className=" w-1/2 ml-10 text-white ">
-          <Link href={"/public"}>
+          <Link href={"/Home"}>
             <h1 className="font-bold text-4xl text-black">Waraqat</h1>
           </Link>
         </div>

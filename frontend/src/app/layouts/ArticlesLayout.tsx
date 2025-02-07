@@ -24,7 +24,7 @@ export default function ArticlesLayout({
     <>
     <nav className="bg-teal-600 flex w-full justify-around items-center h-14 p2">
       <div className="w-1/2 bg-red-400 flex justify-start ml-4">
-        <Link href={"/public"}>
+        <Link href={"/Home"}>
           <h1 className="font-bold text-4xl text-black">Waraqat</h1>
         </Link>
       </div>
