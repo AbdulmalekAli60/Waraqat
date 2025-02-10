@@ -1,26 +1,39 @@
 "use client"
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { UserDataInterface, UserContextType } from "@/Interfaces/UserContextInterface";
 
 const userContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserContextProvider({children}: {children:React.ReactNode}) {
 
-    const [userData,setUserData] = useState<UserDataInterface>({
-        id: 0,
-        username: "",
-        bio: "",
-        profileImage: "",
-        created_at: "",
-    })
+    const [currentUser, setCurrentUser] = useState<UserDataInterface>(() => {
+        if (typeof window !== "undefined") {
+          const savedUser = sessionStorage.getItem("userData");
+          return savedUser ? JSON.parse(savedUser) : {
+            id: 0,
+            username: "",
+            name: "",
+            email:"",
+            bio: "",
+            profileImage: "",
+            created_at: "",
+          };
+        }
+        return { /* default empty user */ };
+      });
+    
+      // Save to sessionStorage whenever currentUser changes
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("userData", JSON.stringify(currentUser));
+        }
+      }, [currentUser]);
 
-    return (
-        <userContext.Provider value={{userData,setUserData}}>
-            <div>
-                {children}
-            </div>
+      return (
+        <userContext.Provider value={{ currentUser, setCurrentUser }}>
+          {children}
         </userContext.Provider>
-    );
+      );
 }
 
 export function useUserInfo(){

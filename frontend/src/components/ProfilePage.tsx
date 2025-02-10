@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bookmark, UserPen } from "lucide-react";
@@ -8,7 +9,49 @@ import { Mail, Heart, MessageCircle } from "lucide-react";
 import { Linkedin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import { useUserInfo } from "@/context/UserContext";
+import { UserDataInterface } from "@/Interfaces/UserContextInterface";
+import { useParams, useRouter } from "next/navigation";
+import { getUserWithId } from "@/services/usersService";
 export default function ProfilePage() {
+  const { currentUser } = useUserInfo();
+
+  const router = useRouter()
+
+  const { id } = useParams();
+
+  const [profileUser, setProfileUser] = useState<UserDataInterface | null>(
+    null
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      if (id && currentUser?.id.toString() !== id) {
+        try {
+          const response = await getUserWithId(Number(id));
+          if (isMounted) setProfileUser(response.data);
+        } catch (error) {
+          console.error("Failed to fetch user:", error);
+        }
+      } else {
+        if (isMounted) setProfileUser({ ...currentUser });
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false; // Prevent state updates on unmounted component
+    };
+  }, [id, currentUser]);
+  
+
+  if (!profileUser) return <div>Loading...</div>;
+
+  const isCurrentUser = !id || Number(id) === currentUser?.id;
+
   return (
     // profile card
     <div className="min-h-screen p-4">
@@ -17,17 +60,29 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row gap-6">
             {/* Avatar Section */}
             <Avatar className="w-24 h-24">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarImage src={profileUser.profileImage} alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 
             {/* Username and Edit Button Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
-              <span className="text-xl font-bold">@Username</span>
-              <Button className="flex items-center gap-2">
-                <UserPen className="w-4 h-4" />
-                Edit Profile
-              </Button>
+              <div>
+                <span className="font-bold">{profileUser?.name}</span>
+                <br />
+                <span className="font-bold text-gray-600">
+                  {profileUser?.username}
+                </span>
+                <br />
+                <span className="font-bold text-gray-600">
+                  {profileUser?.created_at}
+                </span>
+              </div>
+              {isCurrentUser && (
+                <Button className="flex items-center gap-2" onClick={() => router.push("/edit_profile")}>
+                  <UserPen className="w-4 h-4" />
+                  Edit Profile
+                </Button>
+              )}
             </div>
           </div>
 
@@ -51,15 +106,7 @@ export default function ProfilePage() {
         </CardHeader>
 
         <CardContent>
-          <p className="text-gray-600">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta
-            aliquam molestias qui. Mollitia incidunt hic deleniti consequuntur
-            nam eveniet, perspiciatis odit ea enim deserunt optio quo sit
-            exercitationem voluptate. Qui! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Explicabo neque, exercitationem
-            placeat quae, iusto quas, quibusdam earum architecto optio provident
-            excepturi non hic soluta. Aut ducimus quis quia illo nesciunt.
-          </p>
+          <p className="text-gray-600">{profileUser?.bio}</p>
 
           <div className="mt-4 flex items-center gap-4">
             <Button>
@@ -73,10 +120,10 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
       {/* ===profile card */}
+
       <div className="w-4/5 mx-auto">
         <Separator className="mt-4" />
-          <p className="font-bold text-5xl mt-2 mb-5">Articles</p>
-
+        <p className="font-bold text-5xl mt-2 mb-5">Articles</p>
       </div>
 
       <div className="min-h-screen">
@@ -113,7 +160,9 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <Button><Bookmark/></Button>
+                <Button>
+                  <Bookmark />
+                </Button>
               </div>
             </div>
             {/* title and options */}

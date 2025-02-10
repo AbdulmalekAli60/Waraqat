@@ -12,9 +12,12 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUserInfo } from "@/context/UserContext";
 
 export default function AvatarDropDown() {
   const router = useRouter();
+
+  const {currentUser} = useUserInfo()
 
   // event handlers
   function handleLogOutClick() {
@@ -22,15 +25,15 @@ export default function AvatarDropDown() {
     sessionStorage.removeItem("token");
     sessionStorage.clear();
     localStorage.clear();
-    router.push("/public");
+    router.push("/Home");
   }
   // event handlers
-
+// src="https://github.com/shadcn.png"
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={currentUser?.profileImage} />
           <AvatarFallback>Its You</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

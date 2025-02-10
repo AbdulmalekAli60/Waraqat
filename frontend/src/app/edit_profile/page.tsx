@@ -1,13 +1,11 @@
-"use client";
-
+import EditProfile from "@/components/EditProfile";
 import React from "react";
 import ArticlesLayout from "../layouts/ArticlesLayout";
-import ProfilePage from "@/components/ProfilePage";
 
 export default function page() {
   return (
     <ArticlesLayout>
-      <ProfilePage/>
+      <EditProfile />
     </ArticlesLayout>
   );
 }

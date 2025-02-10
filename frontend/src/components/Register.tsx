@@ -28,12 +28,11 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { userData, setUserData } = useUserInfo();
-  
+  const { currentUser, setCurrentUser } = useUserInfo();
 
   useEffect(() => {
-    console.log("register user data:", userData);
-  }, [userData]);
+    console.log("register user data:", currentUser);
+  }, [currentUser]);
   //event handlers
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -49,12 +48,18 @@ export default function Register() {
     setIsLoading(true);
     try {
       const response = await register(registerData);
-      sessionStorage.setItem("token", response.data.jwtToken);
-      console.log(response);
+      sessionStorage.setItem("token", response.data.accessToken);
       const responseData = response.data.userData;
-      setUserData({
+
+      sessionStorage.setItem("userData", JSON.stringify(responseData));
+
+      console.log(response);
+      setCurrentUser({
+        ...currentUser,
         id: responseData.id,
         username: responseData.username,
+        name: responseData.name,
+
         bio: responseData.bio,
         profileImage: responseData.profileImage,
         created_at: responseData.created_at,

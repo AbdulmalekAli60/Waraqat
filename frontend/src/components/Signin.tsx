@@ -25,32 +25,27 @@ export default function Signin() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { userData,setUserData } = useUserInfo();
+  const { currentUser,setCurrentUser} = useUserInfo();
   useEffect(() => {
-    console.log("Updated user data:", userData);
-  }, [userData]);
+    console.log("Updated user data:", currentUser);
+  }, [currentUser]);
   //event handlers
   async function handleLogInFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
-    console.log(signInData.password)
+    
     try {
       const response = await login(signInData);
-
+      const userData = response.data.userData;
+  
+      // Save token AND user data
       sessionStorage.setItem("token", response.data.accessToken);
-      console.log(response.data);
-      const responseData = response.data.userData;
-      setUserData({
-        ...userData,
-        id: responseData.id,
-        username: responseData.username,
-        bio: responseData.bio,
-        profileImage: responseData.profileImage,
-        created_at: responseData.created_at,
-      });
-      // console.log("user data from sign in: ",userData);
-      // show alert
-      // router.push("articles");
+      sessionStorage.setItem("userData", JSON.stringify(userData));
+      
+      // Update context
+      setCurrentUser(userData);
+      
+      router.push("articles");
     } catch (error) {
       console.error(error);
     } finally {

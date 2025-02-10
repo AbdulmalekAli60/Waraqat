@@ -1,12 +1,23 @@
 export interface UserDataInterface {
-    id: number;
-    username: string;
-    bio: string;
-    profileImage: string;
-    created_at: string;
-  }
+  id: number;
+  username: string;
+  name: string;
+  email:string;
+  bio: string;
+  profileImage: string;
+  created_at: string;
+}
 
-  export interface UserContextType {
-    userData:UserDataInterface,
-    setUserData: (data:UserDataInterface) => void,
-  }
+export interface UserContextType {
+  currentUser: UserDataInterface;
+  setCurrentUser: (user: UserDataInterface) => void;
+}
+
+export interface UpdatedProfileData {
+  id: number;
+  name: string;
+  username: string,
+  email: string;
+  bio: string;
+  profileImage: string;
+}
