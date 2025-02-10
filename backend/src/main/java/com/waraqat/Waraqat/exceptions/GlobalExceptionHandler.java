@@ -49,4 +49,12 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(Unauthorized.class)
+    public ResponseEntity<ErrorResponse> unauthorizedToMakeChange(Unauthorized ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+    }
 }

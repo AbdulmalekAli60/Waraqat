@@ -71,6 +71,7 @@ public class User {
         this.articles = articles;
     }
 
+
     public User(String name, String username, String email, String password,String profileImage) {
         this.name = name;
         this.username = username;

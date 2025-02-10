@@ -3,6 +3,7 @@ package com.waraqat.Waraqat.services.serviceImpl;
 import com.waraqat.Waraqat.dto.JwtDTO;
 import com.waraqat.Waraqat.dto.LoginDTO;
 import com.waraqat.Waraqat.dto.UserDTO;
+import com.waraqat.Waraqat.dto.UserResponseDTO;
 import com.waraqat.Waraqat.entity.User;
 import com.waraqat.Waraqat.exceptions.UserNotFoundException;
 import com.waraqat.Waraqat.exceptions.UsernameAlreadyexist;
@@ -16,13 +17,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Service
+@Component
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepo userRepo;
@@ -63,24 +65,29 @@ public class AuthServiceImpl implements AuthService {
                 getRandomProfileImage()
         );
 
+
        User savedNewUser = userRepo.save(newUser);
+
+        UserResponseDTO userInfoForClinet = new UserResponseDTO(savedNewUser);
+
 
        String token = jwtService.generateToken(userDTO.getEmail());
 
-        return new JwtDTO(token);
+        return new JwtDTO(token,userInfoForClinet);
     }
 
     @Override
     public JwtDTO login(LoginDTO loginDTO) {
-        boolean loginUser = userRepo.existsByEmail(loginDTO.getEmail());
+        User loginUser = userRepo.findByemail(loginDTO.getEmail());
 
         Authentication authentication = authenticationManager.authenticate( // return authenticated object
              new UsernamePasswordAuthenticationToken(loginDTO.getEmail(),loginDTO.getPassword())
         );
 
         if(authentication.isAuthenticated()){
+            UserResponseDTO loggedInUserData = new UserResponseDTO(loginUser);
             String token = jwtService.generateToken(loginDTO.getEmail());
-            return new JwtDTO(token);
+            return new JwtDTO(token,loggedInUserData);
         }else {
             throw new UserNotFoundException("User is not found");
         }
