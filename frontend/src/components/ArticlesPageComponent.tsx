@@ -1,8 +1,42 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { getAllUsersInterface } from "@/Interfaces/UserContextInterface";
+import { getAllUsers } from "@/services/usersService";
+import { Button } from "./ui/button";
 export default function ArticlesPageComponent() {
+  const [allUsersData, setAllUsersData] = useState<getAllUsersInterface[]>([
+    {
+      id: 0,
+      name: "",
+      username: "",
+      profileImage: null,
+    },
+  ]);
+
+  useEffect(() => {
+    getAllUsers()
+      .then((response) => {
+        console.log("all users: ", response.data);
+        setAllUsersData(response.data);
+      })
+      .catch((error) => {
+        console.error("error getting all users", error);
+      });
+  }, []);
+
+  // event handlers
+  function handleArticlesFollowClick(e: React.MouseEvent<HTMLButtonElement>){
+    e.stopPropagation()
+    alert("hi")
+  }
+
+  function handleArticlesPageCardClick(){
+    alert("hi article")
+  }
+  // event handlers
+
+
   return (
     <div className="flex justify-between min-h-screen">
       <div className="w-full">
@@ -10,33 +44,42 @@ export default function ArticlesPageComponent() {
       </div>
 
       <div className="w-4/12 h-screen border-l-2 border-gray-500">
-      <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-        <div className="space-y-4 p-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item) => (
-            <div 
-              key={item}
-              className="bg-white border rounded-lg shadow-sm"
-            >
-              <div className="flex items-center justify-between p-4">
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-full overflow-hidden bg-gray-200">
-                    <img
-                      src="/api/placeholder/36/36"
-                      alt={`User ${item}`}
-                      className="h-full w-full object-cover"
-                    />
+        <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+          <div className="space-y-4 p-4">
+            {allUsersData.map((user) => (
+              <div
+                key={user?.id}
+                onClick={handleArticlesPageCardClick}
+                className="bg-white border rounded-lg shadow-sm cursor-pointer"
+              >
+                <div className="flex items-center justify-between p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-full overflow-hidden bg-gray-200">
+                      {user.profileImage ? (
+                        <img
+                          src={user.profileImage}
+                          alt={`User ${user?.name}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        
+                        <div className="h-full w-full flex items-center justify-center text-gray-400">
+                          
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <span className="font-medium">{user.username}</span>
                   </div>
-                  <span className="font-medium">Username {item}</span>
+                  <Button variant={"follow"} onClick={handleArticlesFollowClick}>
+                    Follow
+                  </Button>
                 </div>
-                <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-600 rounded-full hover:bg-blue-50 transition-colors">
-                  Follow
-                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
