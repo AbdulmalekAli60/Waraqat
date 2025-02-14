@@ -9,7 +9,7 @@ public class AllUsersDTO {
     private Long id;
     private String name;
     private String username;
-    private String bio;
+//    private String bio;
     private String profileImage;
     private Timestamp createdAt;
 
@@ -18,7 +18,7 @@ public class AllUsersDTO {
         this.id = user.getId();
         this.name = user.getName();
         this.username = user.getUsername();
-        this.bio = user.getBio();
+//        this.bio = user.getBio();
         this.profileImage = user.getProfileImage();
         this.createdAt = user. getCreated_at();
     }
@@ -47,13 +47,13 @@ public class AllUsersDTO {
         this.username = username;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+//    public String getBio() {
+//        return bio;
+//    }
+//
+//    public void setBio(String bio) {
+//        this.bio = bio;
+//    }
 
     public String getProfileImage() {
         return profileImage;
