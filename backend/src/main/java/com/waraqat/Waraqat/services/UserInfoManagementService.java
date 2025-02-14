@@ -11,4 +11,6 @@ public interface UserInfoManagementService {
     UserResponseDTO getUserWithId(Long id);
 
     UserResponseDTO editeProfile(Long id, EditProfileDTO editProfileDTO);
+
+    String deleteUserWithId(Long id);
 }

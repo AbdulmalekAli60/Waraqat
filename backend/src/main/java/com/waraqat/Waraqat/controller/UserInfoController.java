@@ -31,4 +31,10 @@ public class UserInfoController {
         UserResponseDTO profileDTO = userInfoManagementService.editeProfile(responseDTO.getId(),responseDTO);
         return ResponseEntity.ok(profileDTO);
     }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<String> deleteUserWithId(@PathVariable Long id){
+        String deletedUser =userInfoManagementService.deleteUserWithId(id);
+        return ResponseEntity.ok(deletedUser);
+    }
 }

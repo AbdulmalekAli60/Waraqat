@@ -60,4 +60,10 @@ public class UserInfoManagementServiceImp implements UserInfoManagementService {
 
         return new UserResponseDTO(user);
     }
+
+    @Override
+    public String deleteUserWithId(Long id) {
+        userRepo.deleteById(id);
+        return "User with id: " + id + " has been deleted";
+    }
 }
