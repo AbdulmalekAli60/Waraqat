@@ -1,11 +1,14 @@
 package com.waraqat.Waraqat.controller;
 
+import com.waraqat.Waraqat.dto.AllUsersDTO;
 import com.waraqat.Waraqat.dto.EditProfileDTO;
 import com.waraqat.Waraqat.dto.UserResponseDTO;
 import com.waraqat.Waraqat.services.UserInfoManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -36,5 +39,11 @@ public class UserInfoController {
     public ResponseEntity<String> deleteUserWithId(@PathVariable Long id){
         String deletedUser =userInfoManagementService.deleteUserWithId(id);
         return ResponseEntity.ok(deletedUser);
+    }
+
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<AllUsersDTO>> getAllUsers(){
+       List<AllUsersDTO> allUsers = userInfoManagementService.getAllUsers();
+       return ResponseEntity.ok(allUsers);
     }
 }

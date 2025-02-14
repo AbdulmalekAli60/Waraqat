@@ -1,5 +1,6 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
+import com.waraqat.Waraqat.dto.AllUsersDTO;
 import com.waraqat.Waraqat.dto.EditProfileDTO;
 import com.waraqat.Waraqat.dto.UserResponseDTO;
 import com.waraqat.Waraqat.entity.User;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 @Component
 public class UserInfoManagementServiceImp implements UserInfoManagementService {
@@ -65,5 +68,17 @@ public class UserInfoManagementServiceImp implements UserInfoManagementService {
     public String deleteUserWithId(Long id) {
         userRepo.deleteById(id);
         return "User with id: " + id + " has been deleted";
+    }
+
+    @Override
+    public List<AllUsersDTO> getAllUsers() {
+        List<User> allUsers = userRepo.findAll();
+        List<AllUsersDTO> dtoList = new ArrayList<>();
+
+        for(User user : allUsers ){
+           AllUsersDTO usersDTO = new  AllUsersDTO(user);
+           dtoList.add(usersDTO);
+        }
+        return dtoList;
     }
 }

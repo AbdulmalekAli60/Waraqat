@@ -13,8 +13,10 @@ import { useUserInfo } from "@/context/UserContext";
 import { UserDataInterface } from "@/Interfaces/UserContextInterface";
 import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
+import FollowDialog from "./FollowDialog";
 export default function ProfilePage() {
   const { currentUser } = useUserInfo();
+  const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
 
   const router = useRouter()
 
@@ -52,6 +54,10 @@ export default function ProfilePage() {
 
   const isCurrentUser = !id || Number(id) === currentUser?.id;
 
+  function handleFollowersClick(){
+    setIsFollowDialogOpen(true)
+  }
+
   return (
     // profile card
     <div className="min-h-screen p-4">
@@ -88,17 +94,17 @@ export default function ProfilePage() {
 
           {/* Stats Section */}
           <div className="flex justify-start gap-8 pt-4">
-            <div className="text-center">
+            <div className="text-center cursor-pointer" >
               <div className="font-bold text-lg">120</div>
               <div className="text-sm text-gray-500">Articles</div>
             </div>
 
-            <div className="text-center">
-              <div className="font-bold text-lg">516</div>
+            <div className="text-center cursor-pointer" onClick={handleFollowersClick}>
+              <div className="font-bold text-lg" >516</div>
               <div className="text-sm text-gray-500">Following</div>
             </div>
 
-            <div className="text-center">
+            <div className="text-center cursor-pointer" onClick={handleFollowersClick}>
               <div className="font-bold text-lg">20</div>
               <div className="text-sm text-gray-500">Followers</div>
             </div>
@@ -169,6 +175,10 @@ export default function ProfilePage() {
           </CardHeader>
         </Card>
       </div>
+
+      {
+        isFollowDialogOpen && (<FollowDialog isOpen={isFollowDialogOpen} onOpenChange={setIsFollowDialogOpen}/>)
+      }
     </div>
   );
 }

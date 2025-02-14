@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "babel-plugin-react-compiler": "^19.0.0-beta-27714ef-20250124"
+  }
+}
