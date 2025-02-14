@@ -1,6 +1,10 @@
 "use client";
-import { UpdatedProfileData } from "@/Interfaces/UserContextInterface";
+import {
+  UpdatedProfileData,
+  UserDataInterface,
+} from "@/Interfaces/UserContextInterface";
 import axios from "axios";
+import { json } from "stream/consumers";
 
 const url = "http://localhost:8080/users";
 
@@ -21,4 +25,18 @@ export const getUserWithId = (id: number) => {
 };
 
 export const updateUserInfo = (updatedData: UpdatedProfileData) =>
-  axios.patch(`${url}/updateInfo`, updatedData, {headers: getAuthHeaderWithToken()});
+  axios.patch(`${url}/updateInfo`, updatedData, {
+    headers: getAuthHeaderWithToken(),
+  });
+
+export const deleteAccount = () => {
+  const userData = sessionStorage.getItem("userData");
+  if (!userData) {
+    throw new Error("user data are not stored in session storage");
+  }
+
+  const x: UserDataInterface = JSON.parse(userData);
+  axios.delete(`${url}/deleteUser/${x.id}`, {
+    headers: getAuthHeaderWithToken(),
+  });
+};

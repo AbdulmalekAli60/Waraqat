@@ -17,18 +17,29 @@ import { useUserInfo } from "@/context/UserContext";
 export default function AvatarDropDown() {
   const router = useRouter();
 
-  const {currentUser} = useUserInfo()
+  const { currentUser , setCurrentUser } = useUserInfo();
 
   // event handlers
   function handleLogOutClick() {
     // log out api
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userData");
     sessionStorage.clear();
     localStorage.clear();
     router.push("/Home");
+
+    setCurrentUser({
+      id: 0,
+      username: "",
+      name: "",
+      email: "",
+      bio: "",
+      profileImage: "",
+      created_at: "",
+    });
   }
   // event handlers
-// src="https://github.com/shadcn.png"
+  // src="https://github.com/shadcn.png"
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

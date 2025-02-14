@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LoaderCircle, User } from "lucide-react";
 import { updateUserInfo } from "@/services/usersService";
+import DeleteAccountAlertDialog from "./DeleteAccountAlertDialog";
 
 interface UserResponseData {
   id: number;
@@ -41,6 +42,7 @@ export default function EditProfile() {
       bio: currentUser.bio || "",
       profileImage: currentUser.profileImage || "",
     });
+    const [isDeleteDialogOpen,setIsDeleteDialogOpen] = useState<boolean>(false)
 
   //   const router = useRouter();
 
@@ -90,9 +92,13 @@ export default function EditProfile() {
       setIsLoading(false);
     }
   }
+
+  function handleDeleteAccountClick(){
+    setIsDeleteDialogOpen(true);
+  }
   //   event handlers
 
-  // 1-profile image 2- name, 3-bio
+  
   return (
     <div className="min-h-screen p-4">
       <Card className="max-w-4xl mx-auto">
@@ -191,7 +197,14 @@ export default function EditProfile() {
             </div>
 
             {/* Submit Button Section */}
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+
+                <Button
+                variant={"danger"}
+                onClick={handleDeleteAccountClick}
+                >Delete Account</Button>
+
+
               <Button
                 type="submit"
                 onClick={handleUpdateInfoClick}
@@ -203,6 +216,10 @@ export default function EditProfile() {
           </div>
         </CardContent>
       </Card>
+
+      {
+        isDeleteDialogOpen && <DeleteAccountAlertDialog isOpen={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}/>
+      }
     </div>
   );
 }
