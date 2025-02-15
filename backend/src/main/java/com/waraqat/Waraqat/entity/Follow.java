@@ -22,7 +22,7 @@ public class Follow {
     private User following;
 
     @Column(name = "created_at")
-    private Timestamp created_at;
+    private Timestamp created_at = new Timestamp(System.currentTimeMillis());
 
     public Follow() {
     }
@@ -46,6 +46,14 @@ public class Follow {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
+    }
+
+    public void setFollower(User follower) {
+        this.follower = follower;
+    }
+
+    public void setFollowing(User following) {
+        this.following = following;
     }
 
     @Override
