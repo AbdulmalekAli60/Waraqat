@@ -1,5 +1,6 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
+import com.waraqat.Waraqat.dto.AllFollowDTO;
 import com.waraqat.Waraqat.entity.Follow;
 import com.waraqat.Waraqat.entity.FollowCompositeKey;
 import com.waraqat.Waraqat.entity.User;
@@ -11,6 +12,8 @@ import com.waraqat.Waraqat.services.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 @Component
 public class FollowServiceImp implements FollowService {
@@ -66,5 +69,25 @@ public class FollowServiceImp implements FollowService {
 
         followRepo.deleteById(key);
         return "Done! unfollowed";
+    }
+
+
+
+    @Override
+    public List<AllFollowDTO> getFollowers(Long id) {
+        List<Follow> allFollowers = followRepo.findAllByFollower_id(id);
+        List<AllFollowDTO> allFollowDTOS = new ArrayList<>();
+
+        for(Follow follow: allFollowers){
+            AllFollowDTO dto = new AllFollowDTO(follow.getPrimaryKey().getFollowerId());
+            allFollowDTOS.add(dto);
+        }
+
+        return allFollowDTOS;
+    }
+
+    @Override
+    public List<AllFollowDTO> getFollowing(Long id) {
+        return List.of();
     }
 }
