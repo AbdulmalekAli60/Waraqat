@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import { getAllUsersInterface } from "@/Interfaces/UserContextInterface";
 import { getAllUsers } from "@/services/usersService";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 export default function ArticlesPageComponent() {
+  const router = useRouter();
   const [allUsersData, setAllUsersData] = useState<getAllUsersInterface[]>([
     {
       id: 0,
@@ -26,16 +28,17 @@ export default function ArticlesPageComponent() {
   }, []);
 
   // event handlers
-  function handleArticlesFollowClick(e: React.MouseEvent<HTMLButtonElement>){
-    e.stopPropagation()
-    alert("hi")
+  function handleArticlesFollowClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    alert("hi");
   }
 
-  function handleArticlesPageCardClick(){
-    alert("hi article")
+  function handleArticlesPageCardClick(userId: number) {
+    console.log("the user id is: ",userId )
+    router.push(`/profile/${userId}`)
+    // alert("hi article");
   }
   // event handlers
-
 
   return (
     <div className="flex justify-between min-h-screen">
@@ -49,7 +52,8 @@ export default function ArticlesPageComponent() {
             {allUsersData.map((user) => (
               <div
                 key={user?.id}
-                onClick={handleArticlesPageCardClick}
+                
+                onClick={() => handleArticlesPageCardClick(user?.id)}
                 className="bg-white border rounded-lg shadow-sm cursor-pointer"
               >
                 <div className="flex items-center justify-between p-4">
@@ -62,16 +66,22 @@ export default function ArticlesPageComponent() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        
                         <div className="h-full w-full flex items-center justify-center text-gray-400">
-                          
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                       )}
                     </div>
-                    <span className="font-medium">{user.username}</span>
+                    <div>
+                      <span className="font-medium">{user.name}</span>
+                      <br />
+
+                      <span className="text-gray-400  font-thin">{user.username}</span>
+                    </div>
                   </div>
-                  <Button variant={"follow"} onClick={handleArticlesFollowClick}>
+                  <Button
+                    variant={"follow"}
+                    onClick={handleArticlesFollowClick}
+                  >
                     Follow
                   </Button>
                 </div>
