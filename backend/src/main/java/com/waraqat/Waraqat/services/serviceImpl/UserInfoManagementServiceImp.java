@@ -6,7 +6,9 @@ import com.waraqat.Waraqat.dto.UserResponseDTO;
 import com.waraqat.Waraqat.entity.User;
 import com.waraqat.Waraqat.exceptions.Unauthorized;
 import com.waraqat.Waraqat.exceptions.UserNotFoundException;
+import com.waraqat.Waraqat.repository.FollowRepo;
 import com.waraqat.Waraqat.repository.UserRepo;
+import com.waraqat.Waraqat.services.FollowService;
 import com.waraqat.Waraqat.services.UserInfoManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,10 +21,12 @@ import java.util.Optional;
 public class UserInfoManagementServiceImp implements UserInfoManagementService {
 
     private UserRepo userRepo;
+    private FollowRepo followRepo;
 
     @Autowired
-    public UserInfoManagementServiceImp(UserRepo repo){
+    public UserInfoManagementServiceImp(UserRepo repo,FollowRepo service){
         this.userRepo = repo;
+        this.followRepo = service;
     }
 
     @Override
@@ -76,7 +80,7 @@ public class UserInfoManagementServiceImp implements UserInfoManagementService {
         List<AllUsersDTO> dtoList = new ArrayList<>();
 
         for(User user : allUsers ){
-           AllUsersDTO usersDTO = new  AllUsersDTO(user);
+           AllUsersDTO usersDTO = new  AllUsersDTO(user, followRepo.existsByFollowingId(user.getId()));
            dtoList.add(usersDTO);
         }
         return dtoList;

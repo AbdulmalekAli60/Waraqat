@@ -1,10 +1,10 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
-import com.waraqat.Waraqat.dto.AllFollowDTO;
+import com.waraqat.Waraqat.dto.AllUsersDTO;
+import com.waraqat.Waraqat.dto.UserFollowDTO;
 import com.waraqat.Waraqat.entity.Follow;
 import com.waraqat.Waraqat.entity.FollowCompositeKey;
 import com.waraqat.Waraqat.entity.User;
-import com.waraqat.Waraqat.exceptions.Unauthorized;
 import com.waraqat.Waraqat.exceptions.UserNotFoundException;
 import com.waraqat.Waraqat.repository.FollowRepo;
 import com.waraqat.Waraqat.repository.UserRepo;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 @Component
 public class FollowServiceImp implements FollowService {
 
@@ -74,12 +74,14 @@ public class FollowServiceImp implements FollowService {
 
 
     @Override
-    public List<AllFollowDTO> getFollowers(Long id) {
-        List<Follow> allFollowers = followRepo.findAllByFollower_id(id);
-        List<AllFollowDTO> allFollowDTOS = new ArrayList<>();
+    public List<UserFollowDTO> getFollowing(Long id) {
+        List<User> allFollowers = followRepo.findAllByFollower_id(id);
+        List<UserFollowDTO> allFollowDTOS = new ArrayList<>();
 
-        for(Follow follow: allFollowers){
-            AllFollowDTO dto = new AllFollowDTO(follow.getPrimaryKey().getFollowerId());
+        for(User user: allFollowers){
+            UserFollowDTO dto = new UserFollowDTO(user,
+                    followRepo.existsByFollowerIdAndFollowingId(id,
+                                                            user.getId()));
             allFollowDTOS.add(dto);
         }
 
@@ -87,7 +89,15 @@ public class FollowServiceImp implements FollowService {
     }
 
     @Override
-    public List<AllFollowDTO> getFollowing(Long id) {
-        return List.of();
+    public List<UserFollowDTO> getFollowers(Long id) {
+        List<User> allFollowing = followRepo.findAllByFollower_id(id);
+        List<UserFollowDTO> usersDTOS = new ArrayList<>();
+
+        for(User user : allFollowing){
+            UserFollowDTO allUsersDTO = new UserFollowDTO(user, followRepo.existsByFollowerIdAndFollowingId(id,user.getId()));
+            usersDTOS.add(allUsersDTO);
+        }
+
+        return usersDTOS;
     }
 }

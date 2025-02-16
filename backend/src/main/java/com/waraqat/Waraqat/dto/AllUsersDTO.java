@@ -12,15 +12,17 @@ public class AllUsersDTO {
 //    private String bio;
     private String profileImage;
     private Timestamp createdAt;
+    private boolean doIFollowThisUser;
 
 
-    public AllUsersDTO(User user) {
+    public AllUsersDTO(User user, boolean isUser) {
         this.id = user.getId();
         this.name = user.getName();
         this.username = user.getUsername();
 //        this.bio = user.getBio();
         this.profileImage = user.getProfileImage();
         this.createdAt = user. getCreated_at();
+        this.doIFollowThisUser = isUser;
     }
 
     public Long getId() {
@@ -69,5 +71,13 @@ public class AllUsersDTO {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isDoIFollowThisUser() {
+        return doIFollowThisUser;
+    }
+
+    public void setDoIFollowThisUser(boolean doIFollowThisUser) {
+        this.doIFollowThisUser = doIFollowThisUser;
     }
 }

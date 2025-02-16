@@ -1,6 +1,7 @@
 package com.waraqat.Waraqat.controller;
 
-import com.waraqat.Waraqat.dto.AllFollowDTO;
+import com.waraqat.Waraqat.dto.AllUsersDTO;
+import com.waraqat.Waraqat.dto.UserFollowDTO;
 import com.waraqat.Waraqat.security.CustomUserDetails;
 import com.waraqat.Waraqat.services.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,21 @@ public class FollowController {
        return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/getAllFollowers")
-    public ResponseEntity<List<AllFollowDTO>> getAllFollowersById(
+    @GetMapping("/getFollowing")
+    public ResponseEntity<List<UserFollowDTO>> getAllFollowersById(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         Long currentUserId = userDetails.getId();
-        List<AllFollowDTO> allFollowDTOS = service.getFollowers(currentUserId);
+        List<UserFollowDTO> allFollowDTOS = service.getFollowing(currentUserId);
+        return ResponseEntity.ok(allFollowDTOS);
+    }
+
+    @GetMapping("/getFollowers")
+    public ResponseEntity<List<UserFollowDTO>> getAllFollowingById(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        Long currentUserId = userDetails.getId();
+        List<UserFollowDTO> allFollowDTOS = service.getFollowers(currentUserId);
         return ResponseEntity.ok(allFollowDTOS);
     }
 }
