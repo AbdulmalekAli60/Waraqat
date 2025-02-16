@@ -23,10 +23,10 @@ export interface UpdatedProfileData {
 }
 
 export interface getAllUsersInterface {
-  
-  id: number,
-  name: string,
-  username: string,
-  profileImage: null,
-  
+  id: number;
+  name: string;
+  username: string;
+  profileImage: null;
+
+  doIFollowThisUser: boolean;
 }

@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios";
 import { signInDataInterface,registerDataInterface } from "@/Interfaces/AuthInterfaces";
 
