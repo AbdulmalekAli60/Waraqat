@@ -1,6 +1,5 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
-import com.waraqat.Waraqat.dto.AllUsersDTO;
 import com.waraqat.Waraqat.dto.UserFollowDTO;
 import com.waraqat.Waraqat.entity.Follow;
 import com.waraqat.Waraqat.entity.FollowCompositeKey;

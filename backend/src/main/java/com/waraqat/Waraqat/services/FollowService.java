@@ -1,6 +1,6 @@
 package com.waraqat.Waraqat.services;
 
-import com.waraqat.Waraqat.dto.AllUsersDTO;
+
 import com.waraqat.Waraqat.dto.UserFollowDTO;
 import org.springframework.stereotype.Service;
 

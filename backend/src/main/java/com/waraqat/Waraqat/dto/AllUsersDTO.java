@@ -1,9 +1,11 @@
 package com.waraqat.Waraqat.dto;
 
+import com.waraqat.Waraqat.entity.Follow;
 import com.waraqat.Waraqat.entity.User;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 public class AllUsersDTO {
     private Long id;
@@ -13,6 +15,8 @@ public class AllUsersDTO {
     private String profileImage;
     private Timestamp createdAt;
     private boolean doIFollowThisUser;
+    private Set<Follow> following;
+    private Set<Follow> followers;
 
 
     public AllUsersDTO(User user, boolean isUser) {

@@ -16,6 +16,8 @@ public class UserResponseDTO {
     private String bio;
     private String profileImage;
     private Timestamp created_at;
+    private int followers;
+    private int following;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
@@ -25,33 +27,79 @@ public class UserResponseDTO {
         this.bio = user.getBio();
         this.profileImage = user.getProfileImage();
         this.created_at = user.getCreated_at();
+        this.followers = user.getFollower().size();
+        this.following = user.getFollowing().size();
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getBio() {
         return bio;
     }
 
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     public String getProfileImage() {
         return profileImage;
     }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public Timestamp getCreated_at() {
         return created_at;
+    }
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
+    }
+
+    public int getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
     }
 }

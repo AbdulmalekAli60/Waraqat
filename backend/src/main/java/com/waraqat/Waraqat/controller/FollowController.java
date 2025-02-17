@@ -1,6 +1,5 @@
 package com.waraqat.Waraqat.controller;
 
-import com.waraqat.Waraqat.dto.AllUsersDTO;
 import com.waraqat.Waraqat.dto.UserFollowDTO;
 import com.waraqat.Waraqat.security.CustomUserDetails;
 import com.waraqat.Waraqat.services.FollowService;
