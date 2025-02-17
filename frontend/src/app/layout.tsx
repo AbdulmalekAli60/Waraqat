@@ -7,6 +7,7 @@ import "./globals.css";
 import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
+import { FollowProvider } from "@/context/FollowContext";
 // import Link from "next/link";
 // import { Button } from "@/components/ui/button";
 // import { useRouter } from "next/navigation";
@@ -21,8 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -33,10 +33,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <UserContextProvider>{children}</UserContextProvider>
+        <FollowProvider>
+          <UserContextProvider>{children}</UserContextProvider>
+        </FollowProvider>
       </body>
     </html>
   );
 }
-
-

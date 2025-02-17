@@ -14,13 +14,22 @@ import { UserDataInterface } from "@/Interfaces/UserContextInterface";
 import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
 import FollowDialog from "./FollowDialog";
+import { useFollow } from "@/context/FollowContext";
 export default function ProfilePage() {
   const { currentUser } = useUserInfo();
   const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
-
-  const router = useRouter()
+  const [dialogTab, setDialogTab] = useState<"following" | "followers">("following");
+  const { followersCount, followingCount } = useFollow();
+  const router = useRouter();
 
   const { id } = useParams();
+
+  let finalId: string | number | string[] | null = null;
+  if (!id) {
+    finalId = currentUser.id;
+  } else {
+    finalId = id;
+  }
 
   const [profileUser, setProfileUser] = useState<UserDataInterface | null>(
     null
@@ -48,14 +57,21 @@ export default function ProfilePage() {
       isMounted = false; // Prevent state updates on unmounted component
     };
   }, [id, currentUser]);
-  
 
   if (!profileUser) return <div>Loading...</div>;
 
   const isCurrentUser = !id || Number(id) === currentUser?.id;
 
-  function handleFollowersClick(){
-    setIsFollowDialogOpen(true)
+  function handleFollowingClick() {
+    // get following (who i follow) done
+    setDialogTab("following")
+    setIsFollowDialogOpen(true);
+  }
+
+  function handleFollowersClick() {
+    // who follow me (get followers)
+    setDialogTab("followers")
+    setIsFollowDialogOpen(true);
   }
 
   return (
@@ -84,7 +100,10 @@ export default function ProfilePage() {
                 </span>
               </div>
               {isCurrentUser && (
-                <Button className="flex items-center gap-2" onClick={() => router.push("/edit_profile")}>
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={() => router.push("/edit_profile")}
+                >
                   <UserPen className="w-4 h-4" />
                   Edit Profile
                 </Button>
@@ -94,18 +113,23 @@ export default function ProfilePage() {
 
           {/* Stats Section */}
           <div className="flex justify-start gap-8 pt-4">
-            <div className="text-center cursor-pointer" >
+            <div className="text-center cursor-pointer">
               <div className="font-bold text-lg">120</div>
               <div className="text-sm text-gray-500">Articles</div>
             </div>
 
-            <div className="text-center cursor-pointer" onClick={handleFollowersClick}>
-              <div className="font-bold text-lg" >516</div>
+            <div
+              className="text-center cursor-pointer"
+              onClick={handleFollowingClick}
+            >
+              <div className="font-bold text-lg">{followingCount}</div>
               <div className="text-sm text-gray-500">Following</div>
             </div>
-
-            <div className="text-center cursor-pointer" onClick={handleFollowersClick}>
-              <div className="font-bold text-lg">20</div>
+            <div
+              className="text-center cursor-pointer"
+              onClick={handleFollowersClick}
+            >
+              <div className="font-bold text-lg">{followersCount}</div>
               <div className="text-sm text-gray-500">Followers</div>
             </div>
           </div>
@@ -176,9 +200,14 @@ export default function ProfilePage() {
         </Card>
       </div>
 
-      {
-        isFollowDialogOpen && (<FollowDialog isOpen={isFollowDialogOpen} onOpenChange={setIsFollowDialogOpen}/>)
-      }
+      {isFollowDialogOpen && (
+        <FollowDialog
+          isOpen={isFollowDialogOpen}
+          onOpenChange={setIsFollowDialogOpen}
+          userId={finalId}
+          initialTab={dialogTab}
+        />
+      )}
     </div>
   );
 }

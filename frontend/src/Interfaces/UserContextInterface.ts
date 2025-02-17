@@ -30,3 +30,12 @@ export interface getAllUsersInterface {
 
   doIFollowThisUser: boolean;
 }
+
+export interface getAllFollowingInterface {
+  id: number;
+  name : string;
+  username: string;
+  profileImage: undefined;
+
+  following: boolean;
+}
