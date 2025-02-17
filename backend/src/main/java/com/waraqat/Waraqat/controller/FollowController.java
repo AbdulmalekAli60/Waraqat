@@ -16,48 +16,42 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/followManagement")
 public class FollowController {
-
     private final FollowService service;
 
     @Autowired
-    public FollowController(FollowService followService){
+    public FollowController(FollowService followService) {
         this.service = followService;
     }
 
     @PostMapping("/follow/{followingId}")
     public ResponseEntity<String> follow(
-              @AuthenticationPrincipal CustomUserDetails userDetails
-            , @PathVariable("followingId") Long followingId){
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable("followingId") Long followingId) {
         Long currentUserId = userDetails.getId();
-        String result = service.follow(currentUserId,followingId);
+        String result = service.follow(currentUserId, followingId);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/unfollow/{followingId}")
     public ResponseEntity<String> unfollow(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable("followingId") Long followingId
-    ){
-       Long currentUserId = userDetails.getId();
-       String result = service.unfollow(currentUserId,followingId);
-       return ResponseEntity.ok(result);
+            @PathVariable("followingId") Long followingId) {
+        Long currentUserId = userDetails.getId();
+        String result = service.unfollow(currentUserId, followingId);
+        return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/getFollowing")
-    public ResponseEntity<List<UserFollowDTO>> getAllFollowersById(
-            @AuthenticationPrincipal CustomUserDetails userDetails
-    ){
-        Long currentUserId = userDetails.getId();
-        List<UserFollowDTO> allFollowDTOS = service.getFollowing(currentUserId);
-        return ResponseEntity.ok(allFollowDTOS);
+    @GetMapping("/getFollowing/{id}")
+    public ResponseEntity<List<UserFollowDTO>> getAllFollowing(
+            @PathVariable("id") Long id) {
+        List<UserFollowDTO> following = service.getFollowing(id);
+        return ResponseEntity.ok(following);
     }
 
-    @GetMapping("/getFollowers")
-    public ResponseEntity<List<UserFollowDTO>> getAllFollowingById(
-            @AuthenticationPrincipal CustomUserDetails userDetails
-    ){
-        Long currentUserId = userDetails.getId();
-        List<UserFollowDTO> allFollowDTOS = service.getFollowers(currentUserId);
-        return ResponseEntity.ok(allFollowDTOS);
+    @GetMapping("/getFollowers/{id}")
+    public ResponseEntity<List<UserFollowDTO>> getAllFollowers(
+            @PathVariable("id") Long id) {
+        List<UserFollowDTO> followers = service.getFollowers(id);
+        return ResponseEntity.ok(followers);
     }
 }

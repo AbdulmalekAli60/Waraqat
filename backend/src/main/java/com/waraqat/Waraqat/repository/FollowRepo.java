@@ -13,14 +13,15 @@ import java.util.List;
 @Repository
 public interface FollowRepo extends JpaRepository<Follow, FollowCompositeKey> {
 
-    // query
-    @Query("SELECT uf.following FROM Follow uf WHERE uf.follower.id = :id")
+    @Query("SELECT f.following FROM Follow f WHERE f.follower.id = :id")
     List<User> findAllByFollower_id(@Param("id") Long followerId);
 
-    @Query("SELECT uf.follower FROM Follow uf WHERE uf.following.id = :id")
-    List<User> findAllByFollowing_id(@Param("id") Long following_Id);
+    // Find all users that follow the given user
+    @Query("SELECT f.follower FROM Follow f WHERE f.following.id = :id")
+    List<User> findAllByFollowing_id(@Param("id") Long followingId);
 
-    boolean existsByFollowerIdAndFollowingId(Long followerId, Long FollowingId);
+    // Check if a following relationship exists
+    boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
 
     boolean existsByFollowingId(Long followerId);
 }

@@ -17,38 +17,35 @@ import java.util.List;
 
 @Component
 public class FollowServiceImp implements FollowService {
-
     private final UserRepo userRepo;
     private final FollowRepo followRepo;
+
     @Autowired
-    public FollowServiceImp(UserRepo repo, FollowRepo followRepo){
+    public FollowServiceImp(UserRepo repo, FollowRepo followRepo) {
         this.userRepo = repo;
         this.followRepo = followRepo;
     }
 
     @Override
     public String follow(Long follower_id, Long following_id) {
+        User follower = userRepo.findUserById(follower_id);
+        if (follower == null) {
+            throw new UserNotFoundException("follower user does not exist");
+        }
 
-       User follower = userRepo.findUserById(follower_id);
-       if(follower == null){
-           throw new UserNotFoundException("follower user dose not exist");
-       }
+        User following = userRepo.findUserById(following_id);
+        if (following == null) { // Fixed the null check
+            throw new UserNotFoundException("following user does not exist");
+        }
 
-       User following = userRepo.findUserById(following_id);
-       if(following_id == null){
-           throw new UserNotFoundException(" following user dose not exist");
-       }
+        if (follower_id.equals(following_id)) {
+            throw new IllegalArgumentException("User cant follow himself");
+        }
 
-       if(follower_id.equals(following_id)){
-           throw new IllegalArgumentException("User cant follow himself");
-       }
-
-        FollowCompositeKey key = new FollowCompositeKey(follower_id,following_id);
-       if(followRepo.existsById(key)){
-           throw new IllegalArgumentException("You are already following this user");
-       }
-
-        System.out.println("the key is: " + key);
+        FollowCompositeKey key = new FollowCompositeKey(follower_id, following_id);
+        if (followRepo.existsById(key)) {
+            throw new IllegalArgumentException("You are already following this user");
+        }
 
         Follow follow = new Follow();
         follow.setPrimaryKey(key);
@@ -61,7 +58,7 @@ public class FollowServiceImp implements FollowService {
 
     @Override
     public String unfollow(Long follower_id, Long following_id) {
-        FollowCompositeKey key = new FollowCompositeKey(follower_id,following_id);
+        FollowCompositeKey key = new FollowCompositeKey(follower_id, following_id);
 
         if (!followRepo.existsById(key)) {
             throw new IllegalStateException("Not following this user");
@@ -71,33 +68,36 @@ public class FollowServiceImp implements FollowService {
         return "Done! unfollowed";
     }
 
-
-
     @Override
     public List<UserFollowDTO> getFollowing(Long id) {
-        List<User> allFollowers = followRepo.findAllByFollower_id(id);
-        List<UserFollowDTO> allFollowDTOS = new ArrayList<>();
+        // Get all users that the current user follows
+        List<User> following = followRepo.findAllByFollower_id(id);
+        List<UserFollowDTO> followingDTOs = new ArrayList<>();
 
-        for(User user: allFollowers){
-            UserFollowDTO dto = new UserFollowDTO(user,
-                    followRepo.existsByFollowerIdAndFollowingId(id,
-                                                            user.getId()));
-            allFollowDTOS.add(dto);
+        for (User user : following) {
+            UserFollowDTO dto = new UserFollowDTO(
+                    user,
+                    true // They are always following since this is the following list
+            );
+            followingDTOs.add(dto);
         }
 
-        return allFollowDTOS;
+        return followingDTOs;
     }
 
     @Override
     public List<UserFollowDTO> getFollowers(Long id) {
-        List<User> allFollowing = followRepo.findAllByFollower_id(id);
-        List<UserFollowDTO> usersDTOS = new ArrayList<>();
+        // Get all users that follow the current user
+        List<User> followers = followRepo.findAllByFollowing_id(id);
+        List<UserFollowDTO> followerDTOs = new ArrayList<>();
 
-        for(User user : allFollowing){
-            UserFollowDTO allUsersDTO = new UserFollowDTO(user, followRepo.existsByFollowerIdAndFollowingId(id,user.getId()));
-            usersDTOS.add(allUsersDTO);
+        for (User user : followers) {
+            // Check if the current user follows back their followers
+            boolean isFollowingBack = followRepo.existsByFollowerIdAndFollowingId(id, user.getId());
+            UserFollowDTO dto = new UserFollowDTO(user, isFollowingBack);
+            followerDTOs.add(dto);
         }
 
-        return usersDTOS;
+        return followerDTOs;
     }
 }
