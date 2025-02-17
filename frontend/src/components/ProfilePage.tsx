@@ -14,12 +14,12 @@ import { UserDataInterface } from "@/Interfaces/UserContextInterface";
 import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
 import FollowDialog from "./FollowDialog";
-import { useFollow } from "@/context/FollowContext";
 export default function ProfilePage() {
-  const { currentUser } = useUserInfo();
+  const { currentUser, setCurrentUser } = useUserInfo();
   const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
-  const [dialogTab, setDialogTab] = useState<"following" | "followers">("following");
-  const { followersCount, followingCount } = useFollow();
+  const [dialogTab, setDialogTab] = useState<"following" | "followers">(
+    "following"
+  );
   const router = useRouter();
 
   const { id } = useParams();
@@ -39,15 +39,29 @@ export default function ProfilePage() {
     let isMounted = true;
 
     const fetchData = async () => {
-      if (id && currentUser?.id.toString() !== id) {
-        try {
+      try {
+        if (id && currentUser?.id.toString() !== id) {
+        
           const response = await getUserWithId(Number(id));
           if (isMounted) setProfileUser(response.data);
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
+        } else {
+          
+          const response = await getUserWithId(currentUser.id);
+          if (isMounted) {
+            setProfileUser(response.data);
+      
+            const updatedUser = {
+              ...currentUser,
+              followers: response.data.followers,
+              following: response.data.following,
+            };
+            setCurrentUser(updatedUser);
+            
+            sessionStorage.setItem('user', JSON.stringify(updatedUser));
+          }
         }
-      } else {
-        if (isMounted) setProfileUser({ ...currentUser });
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
       }
     };
 
@@ -64,13 +78,13 @@ export default function ProfilePage() {
 
   function handleFollowingClick() {
     // get following (who i follow) done
-    setDialogTab("following")
+    setDialogTab("following");
     setIsFollowDialogOpen(true);
   }
 
   function handleFollowersClick() {
     // who follow me (get followers)
-    setDialogTab("followers")
+    setDialogTab("followers");
     setIsFollowDialogOpen(true);
   }
 
@@ -122,14 +136,14 @@ export default function ProfilePage() {
               className="text-center cursor-pointer"
               onClick={handleFollowingClick}
             >
-              <div className="font-bold text-lg">{followingCount}</div>
+              <div className="font-bold text-lg">{profileUser?.followers}</div>
               <div className="text-sm text-gray-500">Following</div>
             </div>
             <div
               className="text-center cursor-pointer"
               onClick={handleFollowersClick}
             >
-              <div className="font-bold text-lg">{followersCount}</div>
+              <div className="font-bold text-lg">{profileUser?.following}</div>
               <div className="text-sm text-gray-500">Followers</div>
             </div>
           </div>

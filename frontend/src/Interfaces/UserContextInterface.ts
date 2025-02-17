@@ -6,6 +6,9 @@ export interface UserDataInterface {
   bio: string;
   profileImage: string;
   created_at: string;
+
+  followers:number
+  following:number
 }
 
 export interface UserContextType {
@@ -32,7 +35,7 @@ export interface getAllUsersInterface {
 }
 
 export interface getAllFollowingInterface {
-  id: number;
+  userId: number;
   name : string;
   username: string;
   profileImage: undefined;
