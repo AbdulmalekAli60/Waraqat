@@ -7,8 +7,8 @@ export interface UserDataInterface {
   profileImage: string;
   created_at: string;
 
-  followers:number
-  following:number
+  followers: number;
+  following: number;
 }
 
 export interface UserContextType {
@@ -36,9 +36,15 @@ export interface getAllUsersInterface {
 
 export interface getAllFollowingInterface {
   userId: number;
-  name : string;
+  name: string;
   username: string;
   profileImage: undefined;
 
   following: boolean;
+}
+
+export interface getAllCategoriesInterface {
+  id: number;
+  name: string;
+  description: string;
 }

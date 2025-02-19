@@ -41,23 +41,21 @@ export default function ProfilePage() {
     const fetchData = async () => {
       try {
         if (id && currentUser?.id.toString() !== id) {
-        
           const response = await getUserWithId(Number(id));
           if (isMounted) setProfileUser(response.data);
         } else {
-          
           const response = await getUserWithId(currentUser.id);
           if (isMounted) {
             setProfileUser(response.data);
-      
+
             const updatedUser = {
               ...currentUser,
               followers: response.data.followers,
               following: response.data.following,
             };
             setCurrentUser(updatedUser);
-            
-            sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+            sessionStorage.setItem("user", JSON.stringify(updatedUser));
           }
         }
       } catch (error) {
@@ -110,7 +108,10 @@ export default function ProfilePage() {
                 </span>
                 <br />
                 <span className="font-bold text-gray-600">
-                  {profileUser?.created_at}
+                  {new Date(profileUser?.created_at).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })}
                 </span>
               </div>
               {isCurrentUser && (

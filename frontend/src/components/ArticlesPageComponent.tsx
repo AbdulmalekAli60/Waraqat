@@ -1,12 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
-import { getAllUsersInterface } from "@/Interfaces/UserContextInterface";
+import {
+  getAllCategoriesInterface,
+  getAllUsersInterface,
+} from "@/Interfaces/UserContextInterface";
 import { getAllUsers } from "@/services/usersService";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { follow, unfollow } from "@/services/FollowService";
 import { useUserInfo } from "@/context/UserContext";
+import { Badge } from "./ui/badge";
+import {
+  getAllCategories,
+  getCategoryById,
+} from "@/services/CategoriesService";
 export default function ArticlesPageComponent() {
   const router = useRouter();
   const { currentUser } = useUserInfo();
@@ -18,6 +26,16 @@ export default function ArticlesPageComponent() {
       username: "",
       profileImage: null,
       doIFollowThisUser: false,
+    },
+  ]);
+
+  const [allCategories, setAllCategories] = useState<
+    getAllCategoriesInterface[]
+  >([
+    {
+      id: 0,
+      name: "",
+      description: "",
     },
   ]);
 
@@ -66,6 +84,37 @@ export default function ArticlesPageComponent() {
     }
   }
 
+  useEffect(() => {
+    getAllCategories()
+      .then((response) => {
+        console.log(
+          "all categories: ",
+          response.data.map((cate) => cate.name)
+        );
+        setAllCategories(
+          response.data.map((category) => ({
+            id: category?.id,
+            name: category?.name,
+            description: category?.description,
+          }))
+        );
+        console.log("all categories stata: ", allCategories);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  function handleCategoryClick(categoryId: number) {
+    getCategoryById(categoryId)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   function handleArticlesPageCardClick(userId: number) {
     console.log("the user id is: ", userId);
     router.push(`/profile/${userId}`);
@@ -75,9 +124,26 @@ export default function ArticlesPageComponent() {
   return (
     <div className="flex justify-between min-h-screen">
       <div className="w-full">
-        <h1>This is Articles page</h1>
-      </div>
+        <p className="font-bold text-5xl mx-auto w-fit">Articles</p>
 
+        {/* container div */}
+        <div className="flex flex-col items-center  h-full ">
+          <div className=" h-fit p-2 w-full flex gap-2 flex-wrap">
+            {allCategories.map((category) => (
+              <Badge
+                onClick={() => handleCategoryClick(category.id)}
+                className="p-2 cursor-pointer"
+                key={category.id}
+              >
+                {category.name}
+              </Badge>
+            ))}
+          </div>
+
+          <div className="bg-teal-300 h-full w-full p-2 ">articles cards</div>
+        </div>
+        {/* ===container div=== */}
+      </div>
       <div className="w-4/12 h-screen border-l-2 border-gray-500">
         <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           <div className="space-y-4 p-4">
