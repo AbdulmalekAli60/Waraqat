@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  getAllCategoriesInterface,
+  // getAllCategoriesInterface,
   getAllUsersInterface,
 } from "@/Interfaces/UserContextInterface";
 import { getAllUsers } from "@/services/usersService";
@@ -10,11 +10,12 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { follow, unfollow } from "@/services/FollowService";
 import { useUserInfo } from "@/context/UserContext";
-import { Badge } from "./ui/badge";
-import {
-  getAllCategories,
-  getCategoryById,
-} from "@/services/CategoriesService";
+// import { Badge } from "./ui/badge";
+// import {
+//   getAllCategories,
+//   getCategoryById,
+// } from "@/services/CategoriesService";
+import ArticlesCategories from "./ArticlesCategories";
 export default function ArticlesPageComponent() {
   const router = useRouter();
   const { currentUser } = useUserInfo();
@@ -29,15 +30,6 @@ export default function ArticlesPageComponent() {
     },
   ]);
 
-  const [allCategories, setAllCategories] = useState<
-    getAllCategoriesInterface[]
-  >([
-    {
-      id: 0,
-      name: "",
-      description: "",
-    },
-  ]);
 
   useEffect(() => {
     getAllUsers()
@@ -84,37 +76,6 @@ export default function ArticlesPageComponent() {
     }
   }
 
-  useEffect(() => {
-    getAllCategories()
-      .then((response) => {
-        console.log(
-          "all categories: ",
-          response.data.map((cate) => cate.name)
-        );
-        setAllCategories(
-          response.data.map((category) => ({
-            id: category?.id,
-            name: category?.name,
-            description: category?.description,
-          }))
-        );
-        console.log("all categories stata: ", allCategories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  function handleCategoryClick(categoryId: number) {
-    getCategoryById(categoryId)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
   function handleArticlesPageCardClick(userId: number) {
     console.log("the user id is: ", userId);
     router.push(`/profile/${userId}`);
@@ -129,15 +90,7 @@ export default function ArticlesPageComponent() {
         {/* container div */}
         <div className="flex flex-col items-center  h-full ">
           <div className=" h-fit p-2 w-full flex gap-2 flex-wrap">
-            {allCategories.map((category) => (
-              <Badge
-                onClick={() => handleCategoryClick(category.id)}
-                className="p-2 cursor-pointer"
-                key={category.id}
-              >
-                {category.name}
-              </Badge>
-            ))}
+            <ArticlesCategories/>
           </div>
 
           <div className="bg-teal-300 h-full w-full p-2 ">articles cards</div>

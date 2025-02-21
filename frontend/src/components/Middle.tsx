@@ -1,7 +1,7 @@
 
 
 export default function Middle() {
-  return <div className="grid grid-cols-2 h-full">
+  return <div className="grid grid-cols-2 min-h-full">
 
 
     <div className="bg-pink-900 relative">

@@ -194,7 +194,7 @@ export default function ProfilePage() {
 
             {/* title and options */}
             <div className="flex justify-between items-center p-2">
-              <div className="flex gap-3">
+              <div className="flex gap-3">    
                 <Button className="text-white">
                   <MessageCircle />
                   22

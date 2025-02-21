@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 "use client";
 import { UserContextProvider } from "@/context/UserContext";
 // import SignedInUserLayOut from "./articles/layout";
@@ -32,6 +33,12 @@ export default function RootLayout({
   }, []);
   return (
     <html lang="en">
+      <head>
+      <script
+          crossOrigin="anonymous"
+          src="//unpkg.com/react-scan/dist/auto.global.js"
+        />
+      </head>
       <body>
         <FollowProvider>
           <UserContextProvider>{children}</UserContextProvider>
