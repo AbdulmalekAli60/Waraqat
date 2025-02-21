@@ -1,12 +1,9 @@
 package com.waraqat.Waraqat.dto;
 
-import com.waraqat.Waraqat.entity.Articles;
-import com.waraqat.Waraqat.entity.Follow;
 import com.waraqat.Waraqat.entity.User;
-import com.waraqat.Waraqat.entity.UserSocialMedia;
 
 import java.sql.Timestamp;
-import java.util.Set;
+
 public class UserResponseDTO {
 
     private Long id;
@@ -18,6 +15,7 @@ public class UserResponseDTO {
     private Timestamp created_at;
     private int followers;
     private int following;
+    private int articlesCount;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
@@ -29,6 +27,7 @@ public class UserResponseDTO {
         this.created_at = user.getCreated_at();
         this.followers = user.getFollower().size();
         this.following = user.getFollowing().size();
+        this.articlesCount = user.getArticles().size();
     }
 
     public Long getId() {
@@ -101,5 +100,13 @@ public class UserResponseDTO {
 
     public void setFollowing(int following) {
         this.following = following;
+    }
+
+    public int getArticlesCount() {
+        return articlesCount;
+    }
+
+    public void setArticlesCount(int articlesCount) {
+        this.articlesCount = articlesCount;
     }
 }
