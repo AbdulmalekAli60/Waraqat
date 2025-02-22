@@ -9,6 +9,8 @@ export interface UserDataInterface {
 
   followers: number;
   following: number;
+
+  articlesCount: number;
 }
 
 export interface UserContextType {

@@ -129,7 +129,7 @@ export default function ProfilePage() {
           {/* Stats Section */}
           <div className="flex justify-start gap-8 pt-4">
             <div className="text-center cursor-pointer">
-              <div className="font-bold text-lg">120</div>
+              <div className="font-bold text-lg">{profileUser?.articlesCount}</div>
               <div className="text-sm text-gray-500">Articles</div>
             </div>
 
