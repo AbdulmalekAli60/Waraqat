@@ -6,6 +6,7 @@ import {
 } from "@/services/CategoriesService";
 import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
+import { useCreateNewArticle } from "@/context/NewArticleContext";
 
 export default function ArticlesCategories() {
   const [allCategories, setAllCategories] = useState<
@@ -17,6 +18,8 @@ export default function ArticlesCategories() {
       description: "",
     },
   ]);
+
+  const { newArticleData, setNewArticleData } = useCreateNewArticle();
 
   useEffect(() => {
     getAllCategories()
@@ -40,6 +43,7 @@ export default function ArticlesCategories() {
   }, []);
 
   function handleCategoryClick(categoryId: number) {
+    setNewArticleData({ ...newArticleData, categoryId: categoryId });
     getCategoryById(categoryId)
       .then((response) => {
         console.log(response.data);

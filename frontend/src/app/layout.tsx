@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
 import { FollowProvider } from "@/context/FollowContext";
+import { NewArticleContextProvider } from "@/context/NewArticleContext";
 // import Link from "next/link";
 // import { Button } from "@/components/ui/button";
 // import { useRouter } from "next/navigation";
@@ -34,15 +35,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <script
+        <script
           crossOrigin="anonymous"
           src="//unpkg.com/react-scan/dist/auto.global.js"
         />
       </head>
       <body>
-        <FollowProvider>
-          <UserContextProvider>{children}</UserContextProvider>
-        </FollowProvider>
+      <UserContextProvider>
+          <FollowProvider>
+            <NewArticleContextProvider>
+              {children}
+            </NewArticleContextProvider>
+          </FollowProvider>
+        </UserContextProvider>
       </body>
     </html>
   );
