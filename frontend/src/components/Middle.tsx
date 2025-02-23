@@ -10,7 +10,7 @@ export default function Middle() {
 
 
     <div className="bg-teal-400">
-      hiii
+      
     </div>
   </div>;
 }
