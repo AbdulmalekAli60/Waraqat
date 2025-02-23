@@ -108,7 +108,7 @@ export default function ArticlesPageComponent() {
                   onClick={() => handleArticlesPageCardClick(user?.id)}
                   className="bg-white border rounded-lg shadow-sm cursor-pointer"
                 >
-                  <div className="flex items-center justify-between p-4">
+                  <div className="flex items-center justify-between p-4 flex-wrap">
                     <div className="flex items-center gap-3">
                       <div className="h-9 w-9 rounded-full overflow-hidden bg-gray-200">
                         {user.profileImage ? (
@@ -132,6 +132,7 @@ export default function ArticlesPageComponent() {
                       </div>
                     </div>
                     <Button
+                    className="min-w-4 sm:text-sm"
                       variant={user.doIFollowThisUser ? "danger" : "follow"}
                       onClick={(e) => handleArticlesFollowClick(e, user)}
                     >

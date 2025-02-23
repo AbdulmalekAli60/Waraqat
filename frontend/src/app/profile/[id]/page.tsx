@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import ArticlesLayout from "@/app/layouts/ArticlesLayout";
 import ProfilePage from "@/components/ProfilePage";
