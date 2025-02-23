@@ -1,6 +1,8 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
 import com.waraqat.Waraqat.dto.ArticlesDTO;
+import com.waraqat.Waraqat.dto.CreateArticleDTO;
+import com.waraqat.Waraqat.dto.CreateArticleImageDTO;
 import com.waraqat.Waraqat.entity.ArticleImages;
 import com.waraqat.Waraqat.entity.Articles;
 import com.waraqat.Waraqat.entity.Categories;
@@ -15,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -38,32 +41,32 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     @Transactional
-    public ArticlesDTO createArticle(ArticlesDTO articlesDTO) {
-
+    public ArticlesDTO createArticle(CreateArticleDTO createArticleDTO) {
         Articles newArticle = new Articles();
-        newArticle.setTitle(articlesDTO.getTitle());
-        newArticle.setContent(articlesDTO.getContent());
-        newArticle.setClapsCount(articlesDTO.getClapsCount());
-        newArticle.setReadingTime(calculateReadingTime(articlesDTO.getContent()));
-        newArticle.setStatus(articlesDTO.isStatus());
+        newArticle.setTitle(createArticleDTO.getTitle());
+        newArticle.setContent(createArticleDTO.getContent());
+        newArticle.setClapsCount(0L); // initial 0
+        newArticle.setReadingTime(calculateReadingTime(createArticleDTO.getContent()));
+        newArticle.setStatus(true); // Set default status
 
 
-        User userReference = userRepo.getReferenceById(articlesDTO.getUserId());
-        if(userReference == null) throw new UserNotFoundException("user not found");
+        newArticle.setCreated_at(new Timestamp(System.currentTimeMillis()));
 
-        Categories categoryReference = categoriesRepo.getReferenceById(articlesDTO.getCategoryId());
-        if(categoryReference == null) throw new UserNotFoundException("category not found");
+        User userReference = userRepo.getReferenceById(createArticleDTO.getUserId());
+        if(userReference == null) throw new UserNotFoundException("User not found");
+
+        Categories categoryReference = categoriesRepo.getReferenceById(createArticleDTO.getCategoryId());
+        if(categoryReference == null) throw new UserNotFoundException("Category not found");
 
         newArticle.setUser(userReference);
         newArticle.setCategory(categoryReference);
 
-
         Articles savedArticle = articlesRepo.save(newArticle);
 
         // Handle article images
-        if (articlesDTO.getArticleImages() != null && !articlesDTO.getArticleImages().isEmpty()) {
+        if (createArticleDTO.getArticleImages() != null && !createArticleDTO.getArticleImages().isEmpty()) {
             Set<ArticleImages> images = new HashSet<>();
-            for (ArticleImages imageDTO : articlesDTO.getArticleImages()) {
+            for (CreateArticleImageDTO imageDTO : createArticleDTO.getArticleImages()) {
                 ArticleImages image = new ArticleImages(imageDTO.getImageURL());
                 image.setArticle(savedArticle);
                 images.add(image);

@@ -1,6 +1,7 @@
 package com.waraqat.Waraqat.controller;
 
 import com.waraqat.Waraqat.dto.ArticlesDTO;
+import com.waraqat.Waraqat.dto.CreateArticleDTO;
 import com.waraqat.Waraqat.services.ArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class ArticlesController {
     }
 
     @PostMapping("/createArticle")
-    public ResponseEntity<ArticlesDTO> createNewArticle(@RequestBody ArticlesDTO articlesDTO){
-        ArticlesDTO dto = articlesService.createArticle(articlesDTO);
+    public ResponseEntity<ArticlesDTO> createNewArticle(@RequestBody CreateArticleDTO createArticleDTO){
+        ArticlesDTO dto = articlesService.createArticle(createArticleDTO);
         return ResponseEntity.ok(dto);
     }
 }
