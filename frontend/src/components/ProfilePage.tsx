@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -5,15 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, UserPen } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { Mail, Heart, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 import { Linkedin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { useUserInfo } from "@/context/UserContext";
-import { UserDataInterface } from "@/Interfaces/UserContextInterface";
+import {
+  GetArticles,
+  UserDataInterface,
+} from "@/Interfaces/UserContextInterface";
 import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
 import FollowDialog from "./FollowDialog";
+import { getArticleWithUserId } from "@/services/ArticlesService";
 export default function ProfilePage() {
   const { currentUser, setCurrentUser } = useUserInfo();
   const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
@@ -34,6 +39,8 @@ export default function ProfilePage() {
   const [profileUser, setProfileUser] = useState<UserDataInterface | null>(
     null
   );
+
+  const [articlesData, setArticlesData] = useState<GetArticles[] | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -70,6 +77,17 @@ export default function ProfilePage() {
     };
   }, [id, currentUser]);
 
+  useEffect(() => {
+    getArticleWithUserId(currentUser.id)
+      .then((response) => {
+        setArticlesData(response.data);
+        console.log("all articles with user id: ", articlesData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   if (!profileUser) return <div>Loading...</div>;
 
   const isCurrentUser = !id || Number(id) === currentUser?.id;
@@ -84,6 +102,10 @@ export default function ProfilePage() {
     // who follow me (get followers)
     setDialogTab("followers");
     setIsFollowDialogOpen(true);
+  }
+
+  function handleArticleClick(articleId: number) {
+    router.push(`/articles/${articleId}`)
   }
 
   return (
@@ -129,7 +151,9 @@ export default function ProfilePage() {
           {/* Stats Section */}
           <div className="flex justify-start gap-8 pt-4">
             <div className="text-center cursor-pointer">
-              <div className="font-bold text-lg">{profileUser?.articlesCount}</div>
+              <div className="font-bold text-lg">
+                {profileUser?.articlesCount}
+              </div>
               <div className="text-sm text-gray-500">Articles</div>
             </div>
 
@@ -172,47 +196,54 @@ export default function ProfilePage() {
       </div>
 
       <div className="min-h-screen">
-        <Card className="w-4/5 mx-auto ">
-          <CardHeader>
-            {/* article title */}
-            <div className="pb-1 cursor-pointer">
-              <p className="text-3xl font-bold">How to use react router?</p>
-            </div>
-            {/* article title */}
-
-            {/* article image */}
-            <div className="relative w-full h-[400px] overflow-hidden rounded-2xl cursor-pointer">
-              <Image
-                alt="article-image"
-                src="https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-            {/* article image */}
-
-            {/* title and options */}
-            <div className="flex justify-between items-center p-2">
-              <div className="flex gap-3">    
-                <Button className="text-white">
-                  <MessageCircle />
-                  22
-                </Button>
-                <Button className="text-white">
-                  <Heart />5
-                </Button>
+        {articlesData?.map((article) => (
+          <Card
+            className="w-4/5 mt-2 mx-auto"
+            onClick={() => handleArticleClick(article.id)}
+            key={article.id}
+          >
+            <CardHeader>
+              {/* article title */}
+              <div className="pb-1 cursor-pointer">
+                <p className="text-3xl font-bold">{article.title}</p>
               </div>
+              {/* article title */}
 
-              <div>
-                <Button>
-                  <Bookmark />
-                </Button>
+              {/* article image */}
+              <div className="relative w-full h-[400px] overflow-hidden rounded-2xl cursor-pointer">
+                <Image
+                  alt="article-image"
+                  src="https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
-            </div>
-            {/* title and options */}
-          </CardHeader>
-        </Card>
+              {/* article image */}
+
+              {/* title and options */}
+              <div className="flex justify-between items-center p-2">
+                <div className="flex gap-3">
+                  <Button className="text-white">
+                    <MessageCircle />
+                    {article.commentsCount}
+                  </Button>
+                  {/* <Button className="text-white">
+                    <Heart />5
+                  </Button> */}
+                </div>
+
+                <div>
+                  <Button>
+                    <Bookmark />
+                    {/* on click => add to book marks */}
+                  </Button>
+                </div>
+              </div>
+              {/* title and options */}
+            </CardHeader>
+          </Card>
+        ))}
       </div>
 
       {isFollowDialogOpen && (

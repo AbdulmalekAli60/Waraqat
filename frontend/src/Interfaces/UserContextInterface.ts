@@ -58,3 +58,19 @@ export interface ArticleInterface {
   categoryId: number | null;
   // articleImages: [{ imageURL: string }];
 }
+
+export interface GetArticles {
+  id: number,
+  title: string,
+  content: string,
+  userId: number,
+  userName: string,
+  categoryId: number,
+  categoryName: string,
+  clapsCount: number,
+  readingTime: number,
+  status: true,
+  createdAt: string,
+  comments: [],
+  commentsCount: number
+}
