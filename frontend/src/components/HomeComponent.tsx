@@ -7,7 +7,7 @@ export default function HomeComponent() {
     <div className="max-h-screen flex flex-col">
     <div className="flex items-center justify-between bg-blue-200">
       {/* <Middle /> */}
-      <div className="">
+      <div >
         <p className="text-7xl font-bold absolute top-1/4 left-2">
           Read <br />
           Write <br />

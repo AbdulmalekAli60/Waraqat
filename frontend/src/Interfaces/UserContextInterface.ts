@@ -50,3 +50,11 @@ export interface getAllCategoriesInterface {
   name: string;
   description: string;
 }
+
+export interface ArticleInterface {
+  title: string;
+  content: string;
+  userId: number;
+  categoryId: number | null;
+  // articleImages: [{ imageURL: string }];
+}

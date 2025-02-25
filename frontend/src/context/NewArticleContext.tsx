@@ -1,14 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useUserInfo } from "./UserContext";
-
-interface ArticleInterface {
-  title: string;
-  content: string;
-  userId: number;
-  categoryId: number;
-  articleImages: [{ imageURL: string }];
-}
+import { ArticleInterface } from "@/Interfaces/UserContextInterface";
 
 interface ArticleContextType {
   newArticleData: ArticleInterface;
@@ -31,7 +24,7 @@ export function NewArticleContextProvider({
     content: "",
     userId: currentUser.id || 0,
     categoryId: 0,
-    articleImages: [{ imageURL: "" }],
+    // articleImages: [{ imageURL: "" }],
   });
 
   useEffect(() => {

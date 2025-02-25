@@ -1,7 +1,6 @@
 "use client";
-import { useCreateNewArticle } from "@/context/NewArticleContext";
 import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const FroalaEditor = dynamic(
   async () => {
@@ -31,45 +30,49 @@ const FroalaEditorView = dynamic(
   { ssr: false }
 );
 
-export default function TextEditore() {
-  const [model, setModel] = useState("");
+export default function TextEditor({ onContentChange, initialContent = "" }) {
+  const [model, setModel] = useState(initialContent);
   const [isClient, setIsClient] = useState(false);
-
-  const { newArticleData, setNewArticleData } = useCreateNewArticle();
+  const editorRef = useRef<any>(null);
 
   useEffect(() => {
     setIsClient(true);
     const savedContent = localStorage.getItem("savedHtml");
     if (savedContent) {
       setModel(savedContent);
+      onContentChange(savedContent);
     }
   }, []);
 
-  function handleModelChange(content: string) {
+  const handleModelChange = (content: string) => {
     setModel(content);
-    setNewArticleData({ ...newArticleData, content: content });
     localStorage.setItem("savedHtml", content);
-  }
+    onContentChange(content);
+  };
 
   if (!isClient) {
-    return null; // loading
+    return null;
   }
 
   return (
     <div>
       <FroalaEditor
+        ref={editorRef}
         model={model}
         onModelChange={handleModelChange}
         tag="textarea"
         config={{
-          placeholderText: "Write !",
+          placeholderText: "Write your article here!",
           charCounterCount: true,
-          charCounterMax: 100,
+          charCounterMax: 100000,
           saveInterval: 1000,
           events: {
-            "charCounter.exceeded": function () {
-              alert("you have reached the max number of characters");
+            "charCounter.exceeded": function() {
+              alert("You have reached the maximum number of characters");
             },
+            'initialized': function() {
+              editorRef.current = this;
+            }
           },
         }}
       />
