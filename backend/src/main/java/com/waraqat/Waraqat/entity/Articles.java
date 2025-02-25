@@ -33,10 +33,6 @@ public class Articles {
     @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
     private Set<BookMarks> bookMarks = new HashSet<>();
 
-    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<ArticleImages> articleImages = new HashSet<>();
-
     @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comments> comments = new HashSet<>();
 
@@ -58,14 +54,13 @@ public class Articles {
     public Articles() {
     }
 
-    public Articles(Long id, String title, String content, User user, Categories category, Set<BookMarks> bookMarks, Set<ArticleImages> articleImages, Set<Comments> comments, Long clapsCount, Long readingTime, Boolean status, Timestamp created_at, Timestamp updated_at) {
+    public Articles(Long id, String title, String content, User user, Categories category, Set<BookMarks> bookMarks,  Set<Comments> comments, Long clapsCount, Long readingTime, Boolean status, Timestamp created_at, Timestamp updated_at) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
         this.bookMarks = bookMarks;
-        this.articleImages = articleImages;
         this.comments = comments;
         this.clapsCount = clapsCount;
         this.readingTime = readingTime;
@@ -74,13 +69,12 @@ public class Articles {
         this.updated_at = updated_at;
     }
 
-    public Articles(Long id, String title, String content, User user, Categories category, Set<ArticleImages> articleImages, Long clapsCount, Long readingTime, Boolean status) {
+    public Articles(Long id, String title, String content, User user, Categories category,  Long clapsCount, Long readingTime, Boolean status) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
-        this.articleImages = articleImages;
         this.clapsCount = clapsCount;
         this.readingTime = readingTime;
         this.status = status;
@@ -133,14 +127,6 @@ public class Articles {
 
     public void setBookMarks(Set<BookMarks> bookMarks) {
         this.bookMarks = bookMarks;
-    }
-
-    public Set<ArticleImages> getArticleImages() {
-        return articleImages;
-    }
-
-    public void setArticleImages(Set<ArticleImages> articleImages) {
-        this.articleImages = articleImages;
     }
 
     public Set<Comments> getComments() {

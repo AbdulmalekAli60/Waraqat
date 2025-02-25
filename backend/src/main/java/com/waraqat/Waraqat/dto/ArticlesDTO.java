@@ -1,51 +1,50 @@
 package com.waraqat.Waraqat.dto;
 
-import com.waraqat.Waraqat.entity.ArticleImages;
 import com.waraqat.Waraqat.entity.Articles;
 import com.waraqat.Waraqat.entity.Comments;
-import com.waraqat.Waraqat.entity.User;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
 public class ArticlesDTO {
 
-    private Long ArticleId;
+    private Long id;
     private String title;
     private String content;
     private Long userId;
-    private Long categoryId; // not field by the user manually
-    private Set<ArticleImages> articleImages;
-    private Set<Comments> comments;
+    private String userName;
+    private Long categoryId;
+    private String categoryName;
     private Long clapsCount;
     private Long readingTime;
-    private boolean status;
-    private Timestamp created_at = new Timestamp(System.currentTimeMillis());  //add it when before saving;
-//    private Timestamp updated_at; add it before saving
-
-
-    public ArticlesDTO() {
-    }
+    private Boolean status;
+    private Timestamp createdAt;
+    private Set<Comments> comments;
+    private int commentsCount;
 
     public ArticlesDTO(Articles article) {
-        this.ArticleId = article.getId();
+        this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
         this.userId = article.getUser().getId();
+        this.userName = article.getUser().getName();
         this.categoryId = article.getCategory().getId();
-        this.articleImages = article.getArticleImages();
-        this.comments = article.getComments();
+        this.categoryName = article.getCategory().getCategoryName();
         this.clapsCount = article.getClapsCount();
         this.readingTime = article.getReadingTime();
         this.status = article.getStatus();
+        this.createdAt = article.getCreated_at();
+        this.comments = article.getComments();
+        this.commentsCount = article.getComments().size();
+
     }
 
-    public Long getArticleId() {
-        return ArticleId;
+    public Long getId() {
+        return id;
     }
 
-    public void setArticleId(Long articleId) {
-        ArticleId = articleId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -72,6 +71,14 @@ public class ArticlesDTO {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public Long getCategoryId() {
         return categoryId;
     }
@@ -80,21 +87,21 @@ public class ArticlesDTO {
         this.categoryId = categoryId;
     }
 
-    public Set<ArticleImages> getArticleImages() {
-        return articleImages;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setArticleImages(Set<ArticleImages> articleImages) {
-        this.articleImages = articleImages;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public Set<Comments> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comments> comments) {
-        this.comments = comments;
-    }
+//    public List<String> getImageUrls() {
+//        return imageUrls;
+//    }
+//
+//    public void setImageUrls(List<String> imageUrls) {
+//        this.imageUrls = imageUrls;
+//    }
 
     public Long getClapsCount() {
         return clapsCount;
@@ -112,11 +119,35 @@ public class ArticlesDTO {
         this.readingTime = readingTime;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Set<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comments> comments) {
+        this.comments = comments;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
     }
 }

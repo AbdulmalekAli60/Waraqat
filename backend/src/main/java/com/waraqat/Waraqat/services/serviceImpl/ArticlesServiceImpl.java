@@ -2,13 +2,10 @@ package com.waraqat.Waraqat.services.serviceImpl;
 
 import com.waraqat.Waraqat.dto.ArticlesDTO;
 import com.waraqat.Waraqat.dto.CreateArticleDTO;
-import com.waraqat.Waraqat.dto.CreateArticleImageDTO;
-import com.waraqat.Waraqat.entity.ArticleImages;
 import com.waraqat.Waraqat.entity.Articles;
 import com.waraqat.Waraqat.entity.Categories;
 import com.waraqat.Waraqat.entity.User;
 import com.waraqat.Waraqat.exceptions.UserNotFoundException;
-import com.waraqat.Waraqat.repository.ArticlesImagesRepo;
 import com.waraqat.Waraqat.repository.ArticlesRepo;
 import com.waraqat.Waraqat.repository.CategoriesRepo;
 import com.waraqat.Waraqat.repository.UserRepo;
@@ -18,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ArticlesServiceImpl implements ArticlesService {
@@ -28,14 +24,14 @@ public class ArticlesServiceImpl implements ArticlesService {
     private final UserRepo userRepo;
     private final CategoriesRepo categoriesRepo;
     private final ArticlesRepo articlesRepo;
-    private final ArticlesImagesRepo articlesImagesRepo;
+//    private final ArticlesImagesRepo articlesImagesRepo;
 
     @Autowired
-    public ArticlesServiceImpl(UserRepo userRepo, CategoriesRepo categoriesRepo, ArticlesRepo articlesRepo,ArticlesImagesRepo articlesImagesRepo1) {
+    public ArticlesServiceImpl(UserRepo userRepo, CategoriesRepo categoriesRepo, ArticlesRepo articlesRepo) {
         this.userRepo = userRepo;
         this.categoriesRepo = categoriesRepo;
         this.articlesRepo = articlesRepo;
-        this.articlesImagesRepo = articlesImagesRepo1;
+//        this.articlesImagesRepo = articlesImagesRepo1;
     }
 
 
@@ -63,20 +59,65 @@ public class ArticlesServiceImpl implements ArticlesService {
 
         Articles savedArticle = articlesRepo.save(newArticle);
 
-        // Handle article images
-        if (createArticleDTO.getArticleImages() != null && !createArticleDTO.getArticleImages().isEmpty()) {
-            Set<ArticleImages> images = new HashSet<>();
-            for (CreateArticleImageDTO imageDTO : createArticleDTO.getArticleImages()) {
-                ArticleImages image = new ArticleImages(imageDTO.getImageURL());
-                image.setArticle(savedArticle);
-                images.add(image);
-            }
-            articlesImagesRepo.saveAll(images);
-            savedArticle.setArticleImages(images);
-        }
-
         return new ArticlesDTO(savedArticle);
     }
+
+    @Override
+    public List<ArticlesDTO> getAllArticles() {
+        List<Articles> allArticles = articlesRepo.findAll();
+        List<ArticlesDTO> allArticlesDTO = new ArrayList<>();
+
+        for(Articles article : allArticles ){
+            ArticlesDTO dto = new ArticlesDTO(article);
+            allArticlesDTO.add(dto);
+        }
+
+        return allArticlesDTO;
+    }
+
+    @Override
+    public Long endorse(Long id) {
+        Articles articles = articlesRepo.findArticlesById(id);
+//        Long currentCount = articles.getClapsCount();
+        articles.setClapsCount(articles.getClapsCount() + 1);
+        articlesRepo.save(articles);
+        return articles.getClapsCount() ;
+    }
+
+    @Override
+    public ArticlesDTO getArticleWithId(Long id) {
+        Articles articles = articlesRepo.findArticlesById(id);
+
+        return new ArticlesDTO(articles);
+    }
+
+    @Override
+    public List<ArticlesDTO> getAllArticlesByUserId(Long id) {
+        List<Articles> articlesList = articlesRepo.findAllByUser_id(id);
+        List<ArticlesDTO> articlesDTOList = new ArrayList<>();
+
+        for(Articles articles : articlesList){
+            ArticlesDTO dto = new ArticlesDTO(articles);
+            articlesDTOList.add(dto);
+        }
+        return articlesDTOList;
+    }
+
+    @Override
+    public List<ArticlesDTO> getArticleByCategory(Long categoryId) {
+        List<Articles> articlesList = articlesRepo.findAllByCategoryId(categoryId);
+        if (articlesList.isEmpty()){
+            throw new UserNotFoundException("There is no article with this category Id: " + categoryId);
+        }
+        List<ArticlesDTO> articlesDTOList = new ArrayList<>();
+
+        for(Articles articles: articlesList){
+            ArticlesDTO dto = new ArticlesDTO(articles);
+            articlesDTOList.add(dto);
+        }
+        return articlesDTOList;
+    }
+
 
     private Long calculateReadingTime(String text){
         final int averageWordsPerMinute = 225;
