@@ -35,5 +35,19 @@ export const getArticleWithUserId = (
 export const getArticleById = (
   id: number
 ): Promise<AxiosResponse<GetArticles>> => {
-  return axios.get(`${url}/getArticleWithId/${id}`, { headers: getAuthHeaderWithToken() });
+  return axios.get(`${url}/getArticleWithId/${id}`, {
+    headers: getAuthHeaderWithToken(),
+  });
 };
+
+export const incrementLike = (id: number): Promise<AxiosResponse<number>> => {
+  return axios.post(
+    `${url}/ClapsCount/${id}`,
+    {},
+    { headers: getAuthHeaderWithToken() }
+  );
+};
+
+export const getAllArticles = ():Promise<AxiosResponse<GetArticles[]>> => {
+  return axios.get(`${url}/getAllArticles`, {headers:getAuthHeaderWithToken()})
+}

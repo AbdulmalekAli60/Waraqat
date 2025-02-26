@@ -4,27 +4,26 @@ import LottieBookAnimation from './LottieBookAnimation'
 
 export default function HomeComponent() {
   return (
-    <div className="max-h-screen flex flex-col">
-    <div className="flex items-center justify-between bg-blue-200">
-      {/* <Middle /> */}
-      <div >
-        <p className="text-7xl font-bold absolute top-1/4 left-2">
-          Read <br />
-          Write <br />
-          & More!
-        </p>
-      </div>
+    <div className="h-screen flex flex-col overflow-hidden">
+      {/* Main content section - will take remaining height */}
+      <div className="flex flex-col md:flex-row items-center justify-between bg-blue-200 flex-grow">
+        {/* Text Content */}
+        <div className="w-full md:w-1/2 p-4 md:p-8 lg:p-12">
+          <p className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center md:text-left">
+            Read <br />
+            Write <br />
+            & More!
+          </p>
+        </div>
 
-      <div>
-        <div className="w-full h-full">
+        {/* Animation - constrain height to prevent overflow */}
+        <div className="w-full md:w-1/2 h-[300px] md:h-[400px] lg:h-[500px] px-4">
           <LottieBookAnimation />
         </div>
       </div>
-    </div>
 
-    <div>
+      {/* Footer - fixed height */}
       <Footer />
     </div>
-  </div>
   )
 }

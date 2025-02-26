@@ -1,4 +1,5 @@
 "use client";
+
 import { getAllCategoriesInterface } from "@/Interfaces/UserContextInterface";
 import {
   getAllCategories,
@@ -18,16 +19,13 @@ export default function ArticlesCategories() {
       description: "",
     },
   ]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const { newArticleData, setNewArticleData } = useCreateNewArticle();
 
   useEffect(() => {
+    setIsLoading(true);
     getAllCategories()
       .then((response) => {
-        console.log(
-          "all categories: ",
-          response.data.map((cate) => cate.name)
-        );
         setAllCategories(
           response.data.map((category) => ({
             id: category?.id,
@@ -35,10 +33,12 @@ export default function ArticlesCategories() {
             description: category?.description,
           }))
         );
-        console.log("all categories stata: ", allCategories);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -53,13 +53,26 @@ export default function ArticlesCategories() {
       });
   }
 
+  if (isLoading) {
+    return <div className="text-sm text-gray-500">Loading categories...</div>;
+  }
+
+  if (allCategories.length === 0 || (allCategories.length === 1 && allCategories[0].id === 0)) {
+    return <div className="text-sm text-gray-500">No categories available</div>;
+  }
+
   return (
     <>
       {allCategories.map((category) => (
         <Badge
-          onClick={() => handleCategoryClick(category.id)}
-          className="p-2 cursor-pointer"
           key={category.id}
+          onClick={() => handleCategoryClick(category.id)}
+          variant={newArticleData.categoryId === category.id ? "default" : "outline"}
+          className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+            newArticleData.categoryId === category.id
+              ? "bg-primary hover:bg-primary/90"
+              : "hover:bg-gray-100"
+          }`}
         >
           {category.name}
         </Badge>

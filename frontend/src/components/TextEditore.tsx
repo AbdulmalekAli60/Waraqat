@@ -1,4 +1,5 @@
 "use client";
+
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 
@@ -10,10 +11,10 @@ const FroalaEditor = dynamic(
       import("froala-editor/css/froala_style.min.css"),
       import("froala-editor/js/plugins/image.min.js"),
       import("froala-editor/js/plugins/char_counter.min.js"),
-      import("froala-editor/js/plugins/code_view.min.js"),
+      // import("froala-editor/js/plugins/code_view.min.js"),
       import("froala-editor/js/plugins/save.min.js"),
-      import("froala-editor/js/plugins/markdown.min.js"),
-      import("froala-editor/js/plugins/code_beautifier.min.js"),
+      // import("froala-editor/js/plugins/markdown.min.js"),
+      // import("froala-editor/js/plugins/code_beautifier.min.js"),
     ]);
     return values[0].default;
   },
@@ -51,32 +52,66 @@ export default function TextEditor({ onContentChange, initialContent = "" }) {
   };
 
   if (!isClient) {
-    return null;
+    return (
+      <div className="min-h-[200px] w-full flex items-center justify-center bg-gray-50 border rounded-md">
+        <p className="text-gray-400">Loading editor...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <FroalaEditor
-        ref={editorRef}
-        model={model}
-        onModelChange={handleModelChange}
-        tag="textarea"
-        config={{
-          placeholderText: "Write your article here!",
-          charCounterCount: true,
-          charCounterMax: 100000,
-          saveInterval: 1000,
-          events: {
-            "charCounter.exceeded": function() {
-              alert("You have reached the maximum number of characters");
+    <div className="space-y-6">
+      <div className="pb-4">
+        <FroalaEditor
+          ref={editorRef}
+          model={model}
+          onModelChange={handleModelChange}
+          tag="textarea"
+          config={{
+            placeholderText: "Write your article here!",
+            charCounterCount: true,
+            charCounterMax: 100000,
+            saveInterval: 1000,
+            toolbarSticky: true,
+            toolbarStickyOffset: 0,
+            heightMin: 300,
+            heightMax: 600,
+            toolbarButtons: {
+              moreText: {
+                buttons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontSize', 'textColor', 'backgroundColor', 'clearFormatting'],
+              },
+              moreParagraph: {
+                buttons: ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'lineHeight', 'outdent', 'indent', 'quote'],
+              },
+              moreRich: {
+                buttons: [ 'insertImage',  'insertHR', 'emoticons', 'specialCharacters'],
+              },
+              moreMisc: {
+                buttons: ['undo', 'redo' ,'selectAll'],
+                align: 'right',
+                buttonsVisible: 2,
+              }
             },
-            'initialized': function() {
-              editorRef.current = this;
-            }
-          },
-        }}
-      />
-      {model && <FroalaEditorView model={model} />}
+            events: {
+              "charCounter.exceeded": function() {
+                alert("You have reached the maximum number of characters");
+              },
+              'initialized': function() {
+                editorRef.current = this;
+              }
+            },
+          }}
+        />
+      </div>
+      
+      {model && (
+        <div className="p-4 border rounded-md bg-white">
+          <h3 className="text-sm font-medium text-gray-500 mb-4">Preview:</h3>
+          <div className="prose max-w-none">
+            <FroalaEditorView model={model} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
