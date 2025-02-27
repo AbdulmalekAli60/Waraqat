@@ -60,17 +60,25 @@ export interface ArticleInterface {
 }
 
 export interface GetArticles {
-  id: number,
-  title: string,
-  content: string,
-  userId: number,
-  userName: string,
-  categoryId: number,
-  categoryName: string,
-  clapsCount: number,
-  readingTime: number,
-  status: true,
-  createdAt: string,
-  comments: [],
-  commentsCount: number
+  id: number;
+  title: string;
+  content: string;
+  userId: number;
+  userName: string;
+  categoryId: number;
+  categoryName: string;
+  clapsCount: number;
+  readingTime: number;
+  status: boolean;
+  createdAt: string;
+  comments: []; 
+  commentsCount: number;
+  bookmarksCount?: number; 
+  allBookmarks: {
+    primaryKey: {
+      user: number;
+      articles: number;
+    }
+  }[];
+  bookmarked: boolean;
 }

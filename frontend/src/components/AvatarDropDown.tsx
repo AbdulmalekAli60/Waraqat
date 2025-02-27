@@ -17,7 +17,7 @@ import { useUserInfo } from "@/context/UserContext";
 export default function AvatarDropDown() {
   const router = useRouter();
 
-  const { currentUser , setCurrentUser } = useUserInfo();
+  const { currentUser, setCurrentUser } = useUserInfo();
 
   // event handlers
   function handleLogOutClick() {
@@ -36,10 +36,13 @@ export default function AvatarDropDown() {
       bio: "",
       profileImage: "",
       created_at: "",
+      followers: 0,
+      following: 0,
+      articlesCount: 0,
     });
   }
   // event handlers
-  // src="https://github.com/shadcn.png"
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,13 +62,11 @@ export default function AvatarDropDown() {
             </DropdownMenuItem>
           </Link>
 
-          <DropdownMenuItem className="cursor-pointer">
-            Bookmarks
-          </DropdownMenuItem>
-
-          {/* <DropdownMenuItem className="cursor-pointer">
-            Settings
-          </DropdownMenuItem> */}
+          <Link href={"bookmarks"}>
+            <DropdownMenuItem className="cursor-pointer">
+              Bookmarks
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 

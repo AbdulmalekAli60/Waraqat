@@ -19,6 +19,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
 import FollowDialog from "./FollowDialog";
 import { getArticleWithUserId } from "@/services/ArticlesService";
+import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
 export default function ProfilePage() {
   const { currentUser, setCurrentUser } = useUserInfo();
   const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
@@ -129,6 +130,48 @@ export default function ProfilePage() {
       return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
     }
   };
+
+  function handleBookmarkClick(articleId: number, e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+ 
+    const currentArticle = articlesData?.find(article => article.id === articleId);
+    
+    if (!currentArticle) return;
+    
+  
+    const apiCall = currentArticle.bookmarked 
+      ? deleteBoomark(articleId)
+      : addBooMark(articleId);   
+    
+    apiCall.then((response) => {
+      console.log(response);
+      
+      
+      setArticlesData(prevArticles => {
+        if (!prevArticles) return null;
+        
+        return prevArticles.map(article => {
+          if (article.id === articleId) {
+           
+            return {
+              ...article,
+              bookmarked: !article.bookmarked,
+              
+              bookmarksCount: article.bookmarked 
+                ? (article.bookmarksCount || 0) - 1 
+                : (article.bookmarksCount || 0) + 1
+            };
+          }
+         
+          return article;
+        });
+      });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 
   return (
     // profile card
@@ -251,15 +294,12 @@ export default function ProfilePage() {
                     <MessageCircle />
                     {article.commentsCount}
                   </Button>
-                  {/* <Button className="text-white">
-                    <Heart />5
-                  </Button> */}
+                 
                 </div>
 
                 <div>
-                  <Button>
-                    <Bookmark />
-                    {/* on click => add to book marks */}
+                  <Button variant={"ghost"} onClick={(e) => handleBookmarkClick(article.id, e)}>
+                    <Bookmark fill={article.bookmarked ? "black": "white"}/>
                   </Button>
                 </div>
               </div>

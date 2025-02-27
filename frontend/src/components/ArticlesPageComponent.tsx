@@ -15,6 +15,7 @@ import { getAllArticles } from "@/services/ArticlesService";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Bookmark, MessageCircle, User, Clock } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
 
 export default function ArticlesPageComponent() {
   const router = useRouter();
@@ -31,6 +32,10 @@ export default function ArticlesPageComponent() {
 
   const [articlesData, setArticlesData] = useState<GetArticles[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [filteredArticles, setFilteredArticles] = useState<
+    GetArticles[] | null
+  >(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,9 +43,9 @@ export default function ArticlesPageComponent() {
       try {
         const [usersResponse, articlesResponse] = await Promise.all([
           getAllUsers(),
-          getAllArticles()
+          getAllArticles(),
         ]);
-        
+
         setAllUsersData(usersResponse.data);
         setArticlesData(articlesResponse.data);
       } catch (error) {
@@ -49,11 +54,22 @@ export default function ArticlesPageComponent() {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
   // event handlers
+  useEffect(() => {
+    if (articlesData) {
+      const filtered =
+        selectedCategory === 0
+          ? articlesData
+          : articlesData.filter(
+              (article) => article.categoryId === selectedCategory
+            );
+
+      setFilteredArticles(filtered);
+    }
+  }, [articlesData, selectedCategory]);
   async function handleArticlesFollowClick(
     e: React.MouseEvent<HTMLButtonElement>,
     user: getAllUsersInterface
@@ -84,8 +100,49 @@ export default function ArticlesPageComponent() {
     }
   }
 
-  function handleBookMarkClick(){
-    alert("hi")
+  function handleBookmarkClick(
+    articleId: number,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const currentArticle = articlesData?.find(
+      (article) => article.id === articleId
+    );
+
+    if (!currentArticle) return;
+
+    const apiCall = currentArticle.bookmarked
+      ? deleteBoomark(articleId)
+      : addBooMark(articleId);
+
+    apiCall
+      .then((response) => {
+        console.log(response);
+
+        setArticlesData((prevArticles) => {
+          if (!prevArticles) return null;
+
+          return prevArticles.map((article) => {
+            if (article.id === articleId) {
+              return {
+                ...article,
+                bookmarked: !article.bookmarked,
+
+                bookmarksCount: article.bookmarked
+                  ? (article.bookmarksCount || 0) - 1
+                  : (article.bookmarksCount || 0) + 1,
+              };
+            }
+
+            return article;
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleArticlesPageCardClick(userId: number) {
@@ -101,11 +158,12 @@ export default function ArticlesPageComponent() {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = htmlContent;
       const firstImg = tempDiv.querySelector("img");
-      
+      console.log("the selected category is : ", selectedCategory);
+
       if (firstImg) {
         return firstImg.src;
       }
-      
+
       return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
     } catch (error) {
       console.error("Error extracting image:", error);
@@ -123,23 +181,26 @@ export default function ArticlesPageComponent() {
     });
   }
 
-  function handleArticleCardClick(articleId:number){
-    router.push(`/articles/${articleId}`)
+  function handleArticleCardClick(articleId: number) {
+    router.push(`/articles/${articleId}`);
   }
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen w-full">
       {/* Main content area */}
       <div className="w-full lg:w-3/4 p-4">
-        <h1 className="font-bold text-3xl md:text-4xl text-center mb-6">Articles</h1>
+        <h1 className="font-bold text-3xl md:text-4xl text-center mb-6">
+          Articles
+        </h1>
 
         {/* Categories */}
         <div className="mb-6 border-b">
           <h2 className="text-lg font-medium mb-2 px-2">Categories</h2>
           <div className="flex flex-wrap gap-2 mb-1 justify-center">
-            <ArticlesCategories />
+            <ArticlesCategories setSelectedCategory={setSelectedCategory} />
           </div>
         </div>
+        {/* Categories */}
 
         {/* Articles Grid */}
         {isLoading ? (
@@ -148,19 +209,21 @@ export default function ArticlesPageComponent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {articlesData?.map((article) => (
+            {filteredArticles?.map((article) => (
               <Card
-              onClick={() => handleArticleCardClick(article.id)}
+                onClick={() => handleArticleCardClick(article.id)}
                 key={article.id}
                 className="h-full shadow-md hover:shadow-lg transition-shadow duration-200"
               >
                 <CardHeader className="p-4 space-y-2">
                   {/* Article title */}
-                  <div 
+                  <div
                     className="cursor-pointer"
                     onClick={() => handleArticleClick(article.id)}
                   >
-                    <h3 className="text-xl font-bold line-clamp-2">{article.title}</h3>
+                    <h3 className="text-xl font-bold line-clamp-2">
+                      {article.title}
+                    </h3>
                   </div>
 
                   {/* Author and date */}
@@ -173,7 +236,7 @@ export default function ArticlesPageComponent() {
                 </CardHeader>
 
                 {/* Article image */}
-                <div 
+                <div
                   className="relative w-full h-48 overflow-hidden cursor-pointer"
                   onClick={() => handleArticleClick(article.id)}
                 >
@@ -187,7 +250,10 @@ export default function ArticlesPageComponent() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Badge variant="secondary" className="flex items-center gap-1">
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
                         <Clock size={14} />
                         <span>{article.readingTime} min read</span>
                       </Badge>
@@ -197,13 +263,25 @@ export default function ArticlesPageComponent() {
                 </CardContent>
 
                 <CardFooter className="flex justify-between p-4 pt-0">
-                  <Button variant="ghost" disabled className="flex items-center gap-1" size="sm">
+                  <Button
+                    variant="ghost"
+                    disabled
+                    className="flex items-center gap-1"
+                    size="sm"
+                  >
                     <MessageCircle size={16} />
                     <span>{article.commentsCount}</span>
                   </Button>
 
-                  <Button variant="ghost" onClick={handleBookMarkClick} size="sm">
-                    <Bookmark size={16} />
+                  <Button
+                    variant="ghost"
+                    onClick={(e) => handleBookmarkClick(article.id, e)}
+                    size="sm"
+                  >
+                    <Bookmark
+                      fill={article.bookmarked ? "black" : "white"}
+                      size={16}
+                    />
                   </Button>
                 </CardFooter>
               </Card>
@@ -216,7 +294,7 @@ export default function ArticlesPageComponent() {
       <div className="w-full lg:w-1/4 border-t-2 lg:border-t-0 lg:border-l-2 border-gray-200">
         <div className="sticky top-0 p-4">
           <h2 className="font-semibold text-xl mb-4">People to follow</h2>
-          
+
           <div className="overflow-y-auto max-h-[calc(100vh-8rem)] pr-2 space-y-3">
             {allUsersData
               .filter((user) => user.id !== currentUser.id)
@@ -226,7 +304,7 @@ export default function ArticlesPageComponent() {
                   className="bg-white border rounded-lg shadow-sm transition-all hover:shadow-md"
                 >
                   <div className="flex items-center justify-between p-3 flex-wrap">
-                    <div 
+                    <div
                       className="flex items-center gap-3 cursor-pointer"
                       onClick={() => handleArticlesPageCardClick(user?.id)}
                     >
@@ -250,10 +328,12 @@ export default function ArticlesPageComponent() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <Button
                       className="mt-2 sm:mt-0 text-sm"
-                      variant={user.doIFollowThisUser ? "destructive" : "default"}
+                      variant={
+                        user.doIFollowThisUser ? "destructive" : "default"
+                      }
                       size="sm"
                       onClick={(e) => handleArticlesFollowClick(e, user)}
                     >

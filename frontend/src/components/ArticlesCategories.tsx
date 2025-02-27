@@ -5,13 +5,17 @@ import {
   getAllCategories,
   getCategoryById,
 } from "@/services/CategoriesService";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { useCreateNewArticle } from "@/context/NewArticleContext";
 
-export default function ArticlesCategories() {
+interface SelectedCategory {
+  setSelectedCategory: Dispatch<SetStateAction<number>>;
+}
+
+export default function ArticlesCategories({ setSelectedCategory }: SelectedCategory) {
   const [allCategories, setAllCategories] = useState<
-    getAllCategoriesInterface[]
+    getAllCategoriesInterface[] 
   >([
     {
       id: 0,
@@ -21,6 +25,7 @@ export default function ArticlesCategories() {
   ]);
   const [isLoading, setIsLoading] = useState(true);
   const { newArticleData, setNewArticleData } = useCreateNewArticle();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,14 +48,25 @@ export default function ArticlesCategories() {
   }, []);
 
   function handleCategoryClick(categoryId: number) {
-    setNewArticleData({ ...newArticleData, categoryId: categoryId });
-    getCategoryById(categoryId)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    // If clicking the already selected category, unselect it (set to 0)
+    if (selectedCategoryId === categoryId) {
+      setSelectedCategoryId(0);
+      setSelectedCategory(0);
+      setNewArticleData({ ...newArticleData, categoryId: 0 });
+    } else {
+      // Otherwise, select the clicked category
+      setSelectedCategoryId(categoryId);
+      setSelectedCategory(categoryId);
+      setNewArticleData({ ...newArticleData, categoryId: categoryId });
+      
+      getCategoryById(categoryId)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }
 
   if (isLoading) {
@@ -62,21 +78,37 @@ export default function ArticlesCategories() {
   }
 
   return (
-    <>
+    <div className="flex flex-wrap gap-2">
+      {/* "All" category option */}
+      <Badge
+        key="all"
+        onClick={() => handleCategoryClick(0)}
+        variant={selectedCategoryId === 0 ? "default" : "outline"}
+        className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+          selectedCategoryId === 0
+            ? "bg-primary hover:bg-primary/90"
+            : "hover:bg-gray-100"
+        }`}
+      >
+        All
+      </Badge>
+      
       {allCategories.map((category) => (
-        <Badge
-          key={category.id}
-          onClick={() => handleCategoryClick(category.id)}
-          variant={newArticleData.categoryId === category.id ? "default" : "outline"}
-          className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
-            newArticleData.categoryId === category.id
-              ? "bg-primary hover:bg-primary/90"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          {category.name}
-        </Badge>
+        category.id !== 0 && (
+          <Badge
+            key={category.id}
+            onClick={() => handleCategoryClick(category.id)}
+            variant={selectedCategoryId === category.id ? "default" : "outline"}
+            className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+              selectedCategoryId === category.id
+                ? "bg-primary hover:bg-primary/90"
+                : "hover:bg-gray-100"
+            }`}
+          >
+            {category.name}
+          </Badge>
+        )
       ))}
-    </>
+    </div>
   );
 }
