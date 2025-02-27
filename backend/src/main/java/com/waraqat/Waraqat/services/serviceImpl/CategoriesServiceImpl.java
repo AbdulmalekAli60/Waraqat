@@ -59,12 +59,21 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public CategoryDTO findCategoryById(Long id) {
-        boolean IsCategory = categoriesRepo.existsById(id);
-        if (IsCategory){
-            Categories category = categoriesRepo.findCategoryById(id);
-            CategoryDTO categoryDTO = new CategoryDTO(category);
-            return categoryDTO;
+        // All categories (id = 0)
+        if (id == 0) {
+            // Create a dummy "All" category DTO
+            CategoryDTO allCategory = new CategoryDTO();
+            allCategory.setId(0L);
+            allCategory.setName("All Categories");
+            return allCategory;
         }
+
+        boolean isCategory = categoriesRepo.existsById(id);
+        if (isCategory) {
+            Categories category = categoriesRepo.findCategoryById(id);
+            return new CategoryDTO(category);
+        }
+
         throw new IllegalArgumentException("There is no category with the given Id");
     }
 }

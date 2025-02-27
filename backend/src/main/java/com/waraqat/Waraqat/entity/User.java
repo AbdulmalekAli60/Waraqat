@@ -41,9 +41,6 @@ public class User {
     @OneToMany(mappedBy = "following",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Follow> following = new HashSet<>();
 
-    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL)
-    private Set<UserSocialMedia> userSocialMedia = new HashSet<>();
-
     @OneToMany(mappedBy = "user" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Articles> articles = new HashSet<>();
 
@@ -56,7 +53,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String name, String username, String email, String password, String bio, String profileImage, Timestamp created_at, Set<Follow> follower, Set<Follow> following, Set<UserSocialMedia> userSocialMedia, Set<Articles> articles) {
+    public User(Long id, String name, String username, String email, String password, String bio, String profileImage, Timestamp created_at, Set<Follow> follower, Set<Follow> following, Set<Articles> articles) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -67,7 +64,6 @@ public class User {
         this.created_at = created_at;
         this.follower = follower;
         this.following = following;
-        this.userSocialMedia = userSocialMedia;
         this.articles = articles;
     }
 
@@ -160,14 +156,6 @@ public class User {
         this.following = following;
     }
 
-    public Set<UserSocialMedia> getUserSocialMedia() {
-        return userSocialMedia;
-    }
-
-    public void setUserSocialMedia(Set<UserSocialMedia> userSocialMedia) {
-        this.userSocialMedia = userSocialMedia;
-    }
-
     public Set<Articles> getArticles() {
         return articles;
     }
@@ -189,7 +177,6 @@ public class User {
                 ", created_at=" + created_at +
                 ", follower=" + follower +
                 ", following=" + following +
-                ", userSocialMedia=" + userSocialMedia +
                 ", articles=" + articles +
                 '}';
     }

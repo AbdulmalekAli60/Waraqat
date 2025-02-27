@@ -31,6 +31,7 @@ public class Articles {
     private Categories category;
 
     @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+    @JsonIgnore
     private Set<BookMarks> bookMarks = new HashSet<>();
 
     @OneToMany(mappedBy = "article",cascade = {CascadeType.PERSIST, CascadeType.MERGE})

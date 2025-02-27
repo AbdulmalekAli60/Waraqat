@@ -15,6 +15,11 @@ public class BookMarksCompositeKey {
     public BookMarksCompositeKey() {
     }
 
+    public BookMarksCompositeKey(Long articleId, Long userId) {
+        this.articleId = articleId;
+        this.userId = userId;
+    }
+
     public Long getArticles() {
         return articleId;
     }

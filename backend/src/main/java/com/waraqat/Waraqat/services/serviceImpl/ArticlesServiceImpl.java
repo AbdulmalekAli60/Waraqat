@@ -9,9 +9,13 @@ import com.waraqat.Waraqat.exceptions.UserNotFoundException;
 import com.waraqat.Waraqat.repository.ArticlesRepo;
 import com.waraqat.Waraqat.repository.CategoriesRepo;
 import com.waraqat.Waraqat.repository.UserRepo;
+import com.waraqat.Waraqat.security.CustomUserDetails;
 import com.waraqat.Waraqat.services.ArticlesService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -24,14 +28,13 @@ public class ArticlesServiceImpl implements ArticlesService {
     private final UserRepo userRepo;
     private final CategoriesRepo categoriesRepo;
     private final ArticlesRepo articlesRepo;
-//    private final ArticlesImagesRepo articlesImagesRepo;
-
+//    private Long currentUser = getCurrentUserId();
     @Autowired
     public ArticlesServiceImpl(UserRepo userRepo, CategoriesRepo categoriesRepo, ArticlesRepo articlesRepo) {
         this.userRepo = userRepo;
         this.categoriesRepo = categoriesRepo;
         this.articlesRepo = articlesRepo;
-//        this.articlesImagesRepo = articlesImagesRepo1;
+
     }
 
 
@@ -105,16 +108,28 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     public List<ArticlesDTO> getArticleByCategory(Long categoryId) {
-        List<Articles> articlesList = articlesRepo.findAllByCategoryId(categoryId);
-        if (articlesList.isEmpty()){
-            throw new UserNotFoundException("There is no article with this category Id: " + categoryId);
-        }
-        List<ArticlesDTO> articlesDTOList = new ArrayList<>();
+        List<Articles> articlesList;
 
-        for(Articles articles: articlesList){
+        //All categories
+        if (categoryId == 0) {
+            articlesList = articlesRepo.findAll();
+        } else {
+            articlesList = articlesRepo.findAllByCategoryId(categoryId);
+        }
+
+
+        if (articlesList.isEmpty()) {
+            throw new UserNotFoundException("There are no articles" +
+                    (categoryId == 0 ? "" : " with category ID: " + categoryId));
+        }
+
+        // Convert to dto
+        List<ArticlesDTO> articlesDTOList = new ArrayList<>();
+        for (Articles articles : articlesList) {
             ArticlesDTO dto = new ArticlesDTO(articles);
             articlesDTOList.add(dto);
         }
+
         return articlesDTOList;
     }
 
@@ -127,4 +142,14 @@ public class ArticlesServiceImpl implements ArticlesService {
         Long readingTime = Math.max(1L, (long) Math.ceil((double) wordsCount / averageWordsPerMinute));
         return readingTime;
     }
+
+
+    // Helper method to get current user ID
+//    private Long getCurrentUserId() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+//            return ((CustomUserDetails) authentication.getPrincipal()).getId();
+//        }
+//        return null; // Or handle anonymous users appropriately
+//    }
 }
