@@ -22,29 +22,9 @@ public class ArticlesDTO {
     private Timestamp createdAt;
     private Set<Comments> comments;
     private int commentsCount;
-//    private int bookmarksCount;
     private Set<BookMarks> allBookmarks;
     private boolean isBookmarked;
 
-//    public ArticlesDTO(Articles article) {
-//        this.id = article.getId();
-//        this.title = article.getTitle();
-//        this.content = article.getContent();
-//        this.userId = article.getUser().getId();
-//        this.userName = article.getUser().getName();
-//        this.categoryId = article.getCategory().getId();
-//        this.categoryName = article.getCategory().getCategoryName();
-//        this.clapsCount = article.getClapsCount();
-//        this.readingTime = article.getReadingTime();
-//        this.status = article.getStatus();
-//        this.createdAt = article.getCreated_at();
-//        this.comments = article.getComments();
-//        this.commentsCount = article.getComments().size();
-////        this.bookmarksCount = article.getBookMarks().size();
-//        this.allBookmarks = article.getBookMarks();
-//    }
-
-    // New constructor that checks if the article is bookmarked by this user
     public ArticlesDTO(Articles article) {
         this.id = article.getId();
         this.title = article.getTitle();
@@ -59,7 +39,6 @@ public class ArticlesDTO {
         this.createdAt = article.getCreated_at();
         this.comments = article.getComments();
         this.commentsCount = article.getComments().size();
-//        this.bookmarksCount = article.getBookMarks().size();
         this.allBookmarks = article.getBookMarks();
 
         this.isBookmarked = article.getBookMarks().stream()
@@ -121,15 +100,6 @@ public class ArticlesDTO {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
-
-//    public int getBookmarksCount() {
-//        return bookmarksCount;
-//    }
-//
-//    public void setBookmarksCount(int bookmarksCount) {
-//        this.bookmarksCount = bookmarksCount;
-//    }
 
     public boolean isBookmarked() {
         return isBookmarked;
