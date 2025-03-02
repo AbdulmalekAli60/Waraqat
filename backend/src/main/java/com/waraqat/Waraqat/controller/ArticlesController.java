@@ -2,9 +2,11 @@ package com.waraqat.Waraqat.controller;
 
 import com.waraqat.Waraqat.dto.ArticlesDTO;
 import com.waraqat.Waraqat.dto.CreateArticleDTO;
+import com.waraqat.Waraqat.security.CustomUserDetails;
 import com.waraqat.Waraqat.services.ArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,5 +57,12 @@ public class ArticlesController {
     public ResponseEntity<List<ArticlesDTO>> getAllByCategoryId(@PathVariable("id") Long categoryId){
         List<ArticlesDTO> articlesDTOList = articlesService.getArticleByCategory(categoryId);
         return ResponseEntity.ok(articlesDTOList);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteArticle(@PathVariable("id") Long articleId, @AuthenticationPrincipal CustomUserDetails userDetails){
+        Long currentUser = userDetails.getId();
+        String message = articlesService.deleteArticle(articleId,currentUser);
+        return ResponseEntity.ok(message);
     }
 }

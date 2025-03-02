@@ -133,6 +133,19 @@ public class ArticlesServiceImpl implements ArticlesService {
         return articlesDTOList;
     }
 
+    @Override
+    public String deleteArticle(Long articleId,Long userId) {
+        boolean isUser = userRepo.existsById(userId);
+        if(!isUser) throw new UserNotFoundException("user not found");
+
+        boolean isArticle = articlesRepo.existsById(articleId);
+        if(!isArticle) throw new IllegalArgumentException("Article not found");
+
+        articlesRepo.deleteById(articleId);
+
+        return "Article was deleted";
+    }
+
 
     private Long calculateReadingTime(String text){
         final int averageWordsPerMinute = 225;

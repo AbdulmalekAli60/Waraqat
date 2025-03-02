@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.sql.Timestamp;
 
-public class UserDTO {
+public class UserDTO { // register
     @NotBlank(message = "Name should not be null")
     private String name; // not null
 

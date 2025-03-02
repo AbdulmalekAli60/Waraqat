@@ -49,6 +49,8 @@ public class BookMarksServiceImpl implements BookMarksService {
         bookmark.setArticle(article);
         bookmark.setUser(user);
 
+        if(bookMarksRepository.existsById(key)) throw new IllegalArgumentException("Bookmark already exists");
+
         // Save the bookmark
         bookMarksRepository.save(bookmark);
 
@@ -64,15 +66,15 @@ public class BookMarksServiceImpl implements BookMarksService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         BookMarksCompositeKey key = new BookMarksCompositeKey(articleId, userId);
+        boolean bookMarkExists = bookMarksRepository.existsById(key);
 
-        boolean bookMarks = bookMarksRepository.existsById(key);
-        if(bookMarks){
+        if (bookMarkExists) {
             bookMarksRepository.deleteById(key);
-
             return "Bookmark deleted";
+        } else {
+            // Instead of throwing an error, return a message
+            return "Bookmark not found, nothing to delete";
         }
-        throw new   IllegalArgumentException("User not found");
-
     }
 
     @Override

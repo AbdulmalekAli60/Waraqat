@@ -22,5 +22,5 @@ public interface ArticlesService {
 
     List<ArticlesDTO> getArticleByCategory(Long id);
 
-    // get article based on category
+    String deleteArticle(Long articleId, Long userId);
 }
