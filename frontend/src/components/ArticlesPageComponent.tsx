@@ -16,6 +16,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Bookmark, MessageCircle, User, Clock } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
+import Footer from "./Footer";
 
 export default function ArticlesPageComponent() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function ArticlesPageComponent() {
       doIFollowThisUser: false,
     },
   ]);
+  
 
   const [articlesData, setArticlesData] = useState<GetArticles[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -106,42 +108,43 @@ export default function ArticlesPageComponent() {
   ) {
     e.preventDefault();
     e.stopPropagation();
-
+  
     const currentArticle = articlesData?.find(
       (article) => article.id === articleId
     );
-
+  
     if (!currentArticle) return;
-
+  
     const apiCall = currentArticle.bookmarked
       ? deleteBoomark(articleId)
       : addBooMark(articleId);
-
+  
     apiCall
       .then((response) => {
         console.log(response);
-
+  
         setArticlesData((prevArticles) => {
           if (!prevArticles) return null;
-
+  
           return prevArticles.map((article) => {
             if (article.id === articleId) {
               return {
                 ...article,
                 bookmarked: !article.bookmarked,
-
                 bookmarksCount: article.bookmarked
                   ? (article.bookmarksCount || 0) - 1
                   : (article.bookmarksCount || 0) + 1,
               };
             }
-
+  
             return article;
           });
         });
       })
       .catch((err) => {
-        console.log(err);
+        // Improve error handling here
+        console.error("Bookmark operation failed:", err);
+        // Don't update the UI state if there was an error
       });
   }
 
@@ -186,165 +189,168 @@ export default function ArticlesPageComponent() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen w-full">
-      {/* Main content area */}
-      <div className="w-full lg:w-3/4 p-4">
-        <h1 className="font-bold text-3xl md:text-4xl text-center mb-6">
-          Articles
-        </h1>
+    <>
+      <div className="flex flex-col lg:flex-row min-h-screen w-full">
+        {/* Main content area */}
+        <div className="w-full lg:w-3/4 p-4">
+          <h1 className="font-bold text-3xl md:text-4xl text-center mb-6">
+            Articles
+          </h1>
 
-        {/* Categories */}
-        <div className="mb-6 border-b">
-          <h2 className="text-lg font-medium mb-2 px-2">Categories</h2>
-          <div className="flex flex-wrap gap-2 mb-1 justify-center">
-            <ArticlesCategories setSelectedCategory={setSelectedCategory} />
+          {/* Categories */}
+          <div className="mb-6 border-b">
+            <h2 className="text-lg font-medium mb-2 px-2">Categories</h2>
+            <div className="flex flex-wrap gap-2 mb-1 justify-center">
+              <ArticlesCategories setSelectedCategory={setSelectedCategory} />
+            </div>
           </div>
-        </div>
-        {/* Categories */}
+          {/* Categories */}
 
-        {/* Articles Grid */}
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <p>Loading articles...</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {filteredArticles?.map((article) => (
-              <Card
-                onClick={() => handleArticleCardClick(article.id)}
-                key={article.id}
-                className="h-full shadow-md hover:shadow-lg transition-shadow duration-200"
-              >
-                <CardHeader className="p-4 space-y-2">
-                  {/* Article title */}
+          {/* Articles Grid */}
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <p>Loading articles...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+              {filteredArticles?.map((article) => (
+                <Card
+                  onClick={() => handleArticleCardClick(article.id)}
+                  key={article.id}
+                  className="h-full shadow-md hover:shadow-lg transition-shadow duration-200"
+                >
+                  <CardHeader className="p-4 space-y-2">
+                    {/* Article title */}
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => handleArticleClick(article.id)}
+                    >
+                      <h3 className="text-xl font-bold line-clamp-2">
+                        {article.title}
+                      </h3>
+                    </div>
+
+                    {/* Author and date */}
+                    <div className="flex items-center text-sm text-gray-500 gap-2">
+                      <User size={14} />
+                      <span>{article.userName}</span>
+                      <span className="mx-1">•</span>
+                      <span>{formatDate(article.createdAt)}</span>
+                    </div>
+                  </CardHeader>
+
+                  {/* Article image */}
                   <div
-                    className="cursor-pointer"
+                    className="relative w-full h-48 overflow-hidden cursor-pointer"
                     onClick={() => handleArticleClick(article.id)}
                   >
-                    <h3 className="text-xl font-bold line-clamp-2">
-                      {article.title}
-                    </h3>
-                  </div>
-
-                  {/* Author and date */}
-                  <div className="flex items-center text-sm text-gray-500 gap-2">
-                    <User size={14} />
-                    <span>{article.userName}</span>
-                    <span className="mx-1">•</span>
-                    <span>{formatDate(article.createdAt)}</span>
-                  </div>
-                </CardHeader>
-
-                {/* Article image */}
-                <div
-                  className="relative w-full h-48 overflow-hidden cursor-pointer"
-                  onClick={() => handleArticleClick(article.id)}
-                >
-                  <img
-                    alt="article-image"
-                    src={extractFirstImage(article?.content)}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
-                        <Clock size={14} />
-                        <span>{article.readingTime} min read</span>
-                      </Badge>
-                      <Badge>{article.categoryName}</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-
-                <CardFooter className="flex justify-between p-4 pt-0">
-                  <Button
-                    variant="ghost"
-                    disabled
-                    className="flex items-center gap-1"
-                    size="sm"
-                  >
-                    <MessageCircle size={16} />
-                    <span>{article.commentsCount}</span>
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    onClick={(e) => handleBookmarkClick(article.id, e)}
-                    size="sm"
-                  >
-                    <Bookmark
-                      fill={article.bookmarked ? "black" : "white"}
-                      size={16}
+                    <img
+                      alt="article-image"
+                      src={extractFirstImage(article?.content)}
+                      className="w-full h-full object-cover"
                     />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
+                  </div>
 
-      {/* Sidebar - Users */}
-      <div className="w-full lg:w-1/4 border-t-2 lg:border-t-0 lg:border-l-2 border-gray-200">
-        <div className="sticky top-0 p-4">
-          <h2 className="font-semibold text-xl mb-4">People to follow</h2>
-
-          <div className="overflow-y-auto max-h-[calc(100vh-8rem)] pr-2 space-y-3">
-            {allUsersData
-              .filter((user) => user.id !== currentUser.id)
-              .map((user) => (
-                <div
-                  key={user?.id}
-                  className="bg-white border rounded-lg shadow-sm transition-all hover:shadow-md"
-                >
-                  <div className="flex items-center justify-between p-3 flex-wrap">
-                    <div
-                      className="flex items-center gap-3 cursor-pointer"
-                      onClick={() => handleArticlesPageCardClick(user?.id)}
-                    >
-                      <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                        {user.profileImage ? (
-                          <img
-                            src={user.profileImage}
-                            alt={`User ${user?.name}`}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-full w-full flex items-center justify-center text-gray-400 font-medium">
-                            {user.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-medium truncate">{user.name}</p>
-                        <p className="text-gray-400 text-sm truncate">
-                          {user.username}
-                        </p>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          <Clock size={14} />
+                          <span>{article.readingTime} min read</span>
+                        </Badge>
+                        <Badge>{article.categoryName}</Badge>
                       </div>
                     </div>
+                  </CardContent>
+
+                  <CardFooter className="flex justify-between p-4 pt-0">
+                    <Button
+                      variant="ghost"
+                      disabled
+                      className="flex items-center gap-1"
+                      size="sm"
+                    >
+                      <MessageCircle size={16} />
+                      <span>{article.commentsCount}</span>
+                    </Button>
 
                     <Button
-                      className="mt-2 sm:mt-0 text-sm"
-                      variant={
-                        user.doIFollowThisUser ? "destructive" : "default"
-                      }
+                      variant="ghost"
+                      onClick={(e) => handleBookmarkClick(article.id, e)}
                       size="sm"
-                      onClick={(e) => handleArticlesFollowClick(e, user)}
                     >
-                      {user.doIFollowThisUser ? "Unfollow" : "Follow"}
+                      <Bookmark
+                        fill={article.bookmarked ? "black" : "white"}
+                        size={16}
+                      />
                     </Button>
-                  </div>
-                </div>
+                  </CardFooter>
+                </Card>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar - Users */}
+        <div className="w-full lg:w-1/4 border-t-2 lg:border-t-0 lg:border-l-2 border-gray-200">
+          <div className="sticky top-0 p-4">
+            <h2 className="font-semibold text-xl mb-4">People to follow</h2>
+
+            <div className="overflow-y-auto max-h-[calc(100vh-8rem)] pr-2 space-y-3">
+              {allUsersData
+                .filter((user) => user.id !== currentUser.id)
+                .map((user) => (
+                  <div
+                    key={user?.id}
+                    className="bg-white border rounded-lg shadow-sm transition-all hover:shadow-md"
+                  >
+                    <div className="flex items-center justify-between p-3 flex-wrap">
+                      <div
+                        className="flex items-center gap-3 cursor-pointer"
+                        onClick={() => handleArticlesPageCardClick(user?.id)}
+                      >
+                        <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+                          {user.profileImage ? (
+                            <img
+                              src={user.profileImage}
+                              alt={`User ${user?.name}`}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center text-gray-400 font-medium">
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium truncate">{user.name}</p>
+                          <p className="text-gray-400 text-sm truncate">
+                            {user.username}
+                          </p>
+                        </div>
+                      </div>
+
+                      <Button
+                        className="mt-2 sm:mt-0 text-sm"
+                        variant={
+                          user.doIFollowThisUser ? "destructive" : "default"
+                        }
+                        size="sm"
+                        onClick={(e) => handleArticlesFollowClick(e, user)}
+                      >
+                        {user.doIFollowThisUser ? "Unfollow" : "Follow"}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

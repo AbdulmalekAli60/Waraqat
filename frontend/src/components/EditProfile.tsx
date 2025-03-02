@@ -15,11 +15,11 @@ import {
   UserDataInterface,
 } from "@/Interfaces/UserContextInterface";
 import { useUserInfo } from "@/context/UserContext";
-import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LoaderCircle, User } from "lucide-react";
 import { updateUserInfo } from "@/services/usersService";
 import DeleteAccountAlertDialog from "./DeleteAccountAlertDialog";
+import { useAlert } from "@/context/AlertContext";
 
 interface UserResponseData {
   id: number;
@@ -43,21 +43,44 @@ export default function EditProfile() {
       profileImage: currentUser.profileImage || "",
     });
     const [isDeleteDialogOpen,setIsDeleteDialogOpen] = useState<boolean>(false)
+    const {showAlert} = useAlert()
 
-  //   const router = useRouter();
 
-  //   event handlers
-
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const { name, value } = e.target;
-
+    
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value, files } = e.target;
+  
+  if (name === 'profileImage' && files && files.length > 0) {
+    const file = files[0];
+    
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      alert('File is too large. Maximum size is 5MB.');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      
+      setUpdatedProfileData((prev) => ({
+        ...prev,
+        profileImage: base64String,
+      }));
+    };
+    
+    reader.onerror = () => {
+      console.error('Error reading file');
+    };
+    
+    reader.readAsDataURL(file);
+  } else {
     setUpdatedProfileData((prev) => ({
       ...prev,
       [name]: value,
     }));
   }
+};
 
   async function handleUpdateInfoClick() {
     //api call
@@ -86,8 +109,10 @@ export default function EditProfile() {
       console.log("the response: ", response.data);
 
       console.log("updated data: ", updatedProfileData);
+      showAlert("Updated", "bg-green-500")
     } catch (error) {
       console.error(error);
+      showAlert("Error occured","bg-red-500")
     } finally {
       setIsLoading(false);
     }
@@ -184,7 +209,12 @@ export default function EditProfile() {
                 <Label htmlFor="bio">Bio</Label>
                 <textarea
                   value={updatedProfileData?.bio}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setUpdatedProfileData((prev) => ({
+                      ...prev,
+                      bio: e.target.value,
+                    }));
+                  }}
                   name="bio"
                   id="bio"
                   maxLength={255}

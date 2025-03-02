@@ -4,7 +4,7 @@ export interface UserDataInterface {
   name: string;
   email: string;
   bio: string;
-  profileImage: string;
+  profileImage: string | undefined;
   created_at: string;
 
   followers: number;
@@ -71,14 +71,42 @@ export interface GetArticles {
   readingTime: number;
   status: boolean;
   createdAt: string;
-  comments: []; 
+  comments: [];
   commentsCount: number;
-  bookmarksCount?: number; 
+  bookmarksCount?: number;
   allBookmarks: {
     primaryKey: {
       user: number;
       articles: number;
-    }
+    };
   }[];
   bookmarked: boolean;
+}
+
+export interface writeCommentInterface {
+  articleId: number;
+  userId: number;
+  content: string | null;
+}
+
+export interface writeCommentResponse {
+  
+    id: number,
+    userId: number,
+    articleId: number,
+    parentCommentId: null,
+    content: string,
+    clapsCount: null,
+    createdAt: number,
+
+     profileImage:string;
+     username: string;
+}
+
+export interface CommentsInterface {
+  text: string;
+  commentsCount: number;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  setCommentCount: React.Dispatch<React.SetStateAction<GetArticles | null>>
 }

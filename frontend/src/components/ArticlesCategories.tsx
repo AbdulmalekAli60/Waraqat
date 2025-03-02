@@ -9,13 +9,13 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { useCreateNewArticle } from "@/context/NewArticleContext";
 
-interface SelectedCategory {
-  setSelectedCategory: Dispatch<SetStateAction<number>>;
+interface SelectedCategoryProps {
+  setSelectedCategory?: Dispatch<SetStateAction<number>>;
 }
 
-export default function ArticlesCategories({ setSelectedCategory }: SelectedCategory) {
+export default function ArticlesCategories({ setSelectedCategory }: SelectedCategoryProps) {
   const [allCategories, setAllCategories] = useState<
-    getAllCategoriesInterface[] 
+    getAllCategoriesInterface[]
   >([
     {
       id: 0,
@@ -51,17 +51,22 @@ export default function ArticlesCategories({ setSelectedCategory }: SelectedCate
     // If clicking the already selected category, unselect it (set to 0)
     if (selectedCategoryId === categoryId) {
       setSelectedCategoryId(0);
-      setSelectedCategory(0);
+      if (setSelectedCategory) {
+        setSelectedCategory(0);
+      }
       setNewArticleData({ ...newArticleData, categoryId: 0 });
     } else {
       // Otherwise, select the clicked category
       setSelectedCategoryId(categoryId);
-      setSelectedCategory(categoryId);
+      if (setSelectedCategory) {
+        setSelectedCategory(categoryId);
+      }
       setNewArticleData({ ...newArticleData, categoryId: categoryId });
       
       getCategoryById(categoryId)
         .then((response) => {
           console.log(response.data);
+
         })
         .catch((err) => {
           console.error(err);

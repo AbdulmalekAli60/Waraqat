@@ -4,11 +4,21 @@ import { GetArticles } from "@/Interfaces/UserContextInterface";
 import { getArticleById, incrementLike } from "@/services/ArticlesService";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { MessageCircle, Timer, ThumbsUp, User, BookOpen, Bookmark } from "lucide-react";
+import {
+  // MessageCircle,
+  Timer,
+  ThumbsUp,
+  User,
+  BookOpen,
+  Bookmark,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
+import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
+import { useAlert } from "@/context/AlertContext";
+import { Comments } from "./Comments";
 
 export default function ArticleComponent() {
   const [specificArticle, setSpecificArticle] = useState<GetArticles | null>(
@@ -16,7 +26,9 @@ export default function ArticleComponent() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
-  const router = useRouter()
+  const router = useRouter();
+  const { showAlert } = useAlert();
+  const [isCommentsOpen, setIsCommentsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -65,8 +77,9 @@ export default function ArticleComponent() {
         if (specificArticle) {
           setSpecificArticle({
             ...specificArticle,
-            clapsCount: response.data
+            clapsCount: response.data,
           });
+          showAlert("Added", "bg-green-500");
         }
       })
       .catch((err) => {
@@ -74,8 +87,38 @@ export default function ArticleComponent() {
       });
   }
 
-  function handleBookMarkClick(){
-    alert("hi")
+  function handleBookMarkClick(articleId: number) {
+    if (!specificArticle) return;
+
+    if (specificArticle.bookmarked) {
+      deleteBoomark(articleId)
+        .then((response) => {
+          console.log(response);
+
+          setSpecificArticle({
+            ...specificArticle,
+            bookmarked: false,
+            bookmarksCount: (specificArticle.bookmarksCount || 0) - 1,
+          } as GetArticles);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      addBooMark(articleId)
+        .then((response) => {
+          console.log(response);
+
+          setSpecificArticle({
+            ...specificArticle,
+            bookmarked: true,
+            bookmarksCount: (specificArticle.bookmarksCount || 0) + 1,
+          } as GetArticles);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }
   // evvent handler
 
@@ -90,7 +133,14 @@ export default function ArticleComponent() {
 
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <User size={16} />
-              <span className="font-medium cursor-pointer" onClick={() => router.push(`/profile/${specificArticle.userId}`)}>{specificArticle.userName}</span>
+              <span
+                className="font-medium cursor-pointer"
+                onClick={() =>
+                  router.push(`/profile/${specificArticle.userId}`)
+                }
+              >
+                {specificArticle.userName}
+              </span>
             </div>
           </div>
 
@@ -134,24 +184,23 @@ export default function ArticleComponent() {
               <ThumbsUp size={18} />
               <span>Like</span>
             </Button>
-
             <Button
-              variant="ghost"
-              onClick={handleBookMarkClick}
-              className="flex items-center gap-2"
+              variant={"ghost"}
+              onClick={() => handleBookMarkClick(specificArticle.id)}
             >
-              <Bookmark size={18} />
-              <span>Like</span>
+              <Bookmark fill={specificArticle.bookmarked ? "black" : "white"} />
             </Button>
-
-            
           </div>
 
-          <Button variant="outline" className="flex items-center gap-2">
-            {/* here on clicking the button a side menue will show with the comments, if there is */}
-            <MessageCircle size={18} />
-            <span>{specificArticle.commentsCount} Comments</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Comments
+            setCommentCount={setSpecificArticle}
+              text="Comments"
+              setOpen={setIsCommentsOpen}
+              isOpen={isCommentsOpen}
+              commentsCount={specificArticle.commentsCount}
+            />
+          </div>
         </CardFooter>
       </Card>
     </div>

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FollowProvider } from "@/context/FollowContext";
 import { NewArticleContextProvider } from "@/context/NewArticleContext";
+import { AlertProvider } from "@/context/AlertContext";
 // import Link from "next/link";
 // import { Button } from "@/components/ui/button";
 // import { useRouter } from "next/navigation";
@@ -41,10 +42,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-      <UserContextProvider>
+        <UserContextProvider>
           <FollowProvider>
             <NewArticleContextProvider>
-              {children}
+              <AlertProvider>{children}</AlertProvider>
             </NewArticleContextProvider>
           </FollowProvider>
         </UserContextProvider>

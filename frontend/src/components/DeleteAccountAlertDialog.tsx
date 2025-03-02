@@ -14,7 +14,7 @@ export default function DeleteAccountAlertDialog({
   isOpen,
   onOpenChange,
 }: DeleteDialogProps) {
-  const { currentUser , setCurrentUser } = useUserInfo();
+  const { currentUser, setCurrentUser } = useUserInfo();
   const router = useRouter();
 
   function hadnleConfirmDeleteClick() {
@@ -37,6 +37,9 @@ export default function DeleteAccountAlertDialog({
         bio: "",
         profileImage: "",
         created_at: "",
+        articlesCount: 0,
+        followers: 0,
+        following: 0,
       });
     } catch (err) {
       console.error(err);

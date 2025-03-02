@@ -51,3 +51,11 @@ export const incrementLike = (id: number): Promise<AxiosResponse<number>> => {
 export const getAllArticles = ():Promise<AxiosResponse<GetArticles[]>> => {
   return axios.get(`${url}/getAllArticles`, {headers:getAuthHeaderWithToken()})
 }
+
+export const deleteArticle = (
+  id: number
+) => {
+  return axios.delete(`${url}/delete/${id}`, {
+    headers: getAuthHeaderWithToken(),
+  });
+};

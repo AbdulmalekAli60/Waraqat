@@ -22,11 +22,11 @@ export default function AvatarDropDown() {
   // event handlers
   function handleLogOutClick() {
     // log out api
+    router.push("/Home");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userData");
     sessionStorage.clear();
     localStorage.clear();
-    router.push("/Home");
 
     setCurrentUser({
       id: 0,
@@ -34,7 +34,7 @@ export default function AvatarDropDown() {
       name: "",
       email: "",
       bio: "",
-      profileImage: "",
+      profileImage: undefined,
       created_at: "",
       followers: 0,
       following: 0,
@@ -56,13 +56,13 @@ export default function AvatarDropDown() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href={"profile"}>
+          <Link href={"/profile"}>
             <DropdownMenuItem className="cursor-pointer">
               Profile
             </DropdownMenuItem>
           </Link>
 
-          <Link href={"bookmarks"}>
+          <Link href={"/bookmarks"}>
             <DropdownMenuItem className="cursor-pointer">
               Bookmarks
             </DropdownMenuItem>
