@@ -4,7 +4,6 @@ public class EditProfileDTO {
 
     private Long id;
     private String name;
-//    private String username; // just to get the user from repo, not to be sent back
     private String email;
     private String bio;
     private String profileImage;
@@ -27,10 +26,6 @@ public class EditProfileDTO {
     public Long getId() {
         return id;
     }
-
-    //    public String getUsername() {
-//        return username;
-//    }
 
     public String getEmail() {
         return email;

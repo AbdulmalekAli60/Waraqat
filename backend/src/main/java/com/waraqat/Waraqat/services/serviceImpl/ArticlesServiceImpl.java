@@ -28,7 +28,6 @@ public class ArticlesServiceImpl implements ArticlesService {
     private final UserRepo userRepo;
     private final CategoriesRepo categoriesRepo;
     private final ArticlesRepo articlesRepo;
-//    private Long currentUser = getCurrentUserId();
     @Autowired
     public ArticlesServiceImpl(UserRepo userRepo, CategoriesRepo categoriesRepo, ArticlesRepo articlesRepo) {
         this.userRepo = userRepo;
@@ -155,14 +154,4 @@ public class ArticlesServiceImpl implements ArticlesService {
         Long readingTime = Math.max(1L, (long) Math.ceil((double) wordsCount / averageWordsPerMinute));
         return readingTime;
     }
-
-
-    // Helper method to get current user ID
-//    private Long getCurrentUserId() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-//            return ((CustomUserDetails) authentication.getPrincipal()).getId();
-//        }
-//        return null; // Or handle anonymous users appropriately
-//    }
 }

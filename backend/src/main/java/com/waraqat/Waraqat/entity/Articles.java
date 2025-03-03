@@ -18,7 +18,7 @@ public class Articles {
     @Column(name = "title",columnDefinition = "VARCHAR(255)")
     private String title;
 
-    @Column(name = "content",columnDefinition = "TEXT")
+    @Column(name = "content",columnDefinition = "LONGTEXT")
     private String content;
 
     @ManyToOne
@@ -79,7 +79,6 @@ public class Articles {
         this.clapsCount = clapsCount;
         this.readingTime = readingTime;
         this.status = status;
-//        this.created_at = created_at;
     }
 
     public Long getId() {

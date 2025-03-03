@@ -11,7 +11,6 @@ public class AllUsersDTO {
     private Long id;
     private String name;
     private String username;
-//    private String bio;
     private String profileImage;
     private Timestamp createdAt;
     private boolean doIFollowThisUser;
@@ -23,7 +22,6 @@ public class AllUsersDTO {
         this.id = user.getId();
         this.name = user.getName();
         this.username = user.getUsername();
-//        this.bio = user.getBio();
         this.profileImage = user.getProfileImage();
         this.createdAt = user. getCreated_at();
         this.doIFollowThisUser = isUser;
@@ -52,14 +50,6 @@ public class AllUsersDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-
-//    public String getBio() {
-//        return bio;
-//    }
-//
-//    public void setBio(String bio) {
-//        this.bio = bio;
-//    }
 
     public String getProfileImage() {
         return profileImage;

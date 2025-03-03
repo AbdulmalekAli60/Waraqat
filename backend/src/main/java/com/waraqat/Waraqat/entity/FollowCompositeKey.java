@@ -8,11 +8,9 @@ import java.io.Serializable;
 @Embeddable
 public class FollowCompositeKey implements Serializable {
 
-//    @ManyToOne
     @Column(name = "follower_id",nullable = false) // who follow me
     private Long followerId;
 
-//    @ManyToOne
     @Column(name = "following_id",nullable = false) // who I follow
     private Long followingId;
 

@@ -16,7 +16,6 @@ public interface CategoriesService {
 
     List<CategoryDTO> getAllCategories();
 
-//    Optional<Categories> findCategoryById(Long id);
 
     CategoryDTO findCategoryById(Long id);
 

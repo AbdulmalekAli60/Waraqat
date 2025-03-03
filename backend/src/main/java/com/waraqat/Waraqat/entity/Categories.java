@@ -67,8 +67,6 @@ public class Categories {
         this.articles = articles;
     }
 
-
-
     @Override
     public String toString() {
         return "Categories{" +

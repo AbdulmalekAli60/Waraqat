@@ -1,12 +1,10 @@
 package com.waraqat.Waraqat.services.serviceImpl;
 
 import com.waraqat.Waraqat.dto.ArticlesDTO;
-import com.waraqat.Waraqat.dto.BookMarksDTO;
 import com.waraqat.Waraqat.entity.Articles;
 import com.waraqat.Waraqat.entity.BookMarks;
 import com.waraqat.Waraqat.entity.BookMarksCompositeKey;
 import com.waraqat.Waraqat.entity.User;
-import com.waraqat.Waraqat.exceptions.UserNotFoundException;
 import com.waraqat.Waraqat.repository.ArticlesRepo;
 import com.waraqat.Waraqat.repository.BookMarksRepo;
 import com.waraqat.Waraqat.repository.UserRepo;
@@ -14,7 +12,6 @@ import com.waraqat.Waraqat.services.BookMarksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -8,17 +8,15 @@ public class CreateArticleDTO {
     private String content;
     private Long userId;
     private Long categoryId;
-//    private Set<CreateArticleImageDTO> articleImages;
 
     public CreateArticleDTO() {
     }
 
-    public CreateArticleDTO(String title, String content, Long userId, Long categoryId, Set<CreateArticleImageDTO> articleImages) {
+    public CreateArticleDTO(String title, String content, Long userId, Long categoryId) {
         this.title = title;
         this.content = content;
         this.userId = userId;
         this.categoryId = categoryId;
-//        this.articleImages = articleImages;
     }
 
     public String getTitle() {
@@ -52,12 +50,4 @@ public class CreateArticleDTO {
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
-
-//    public Set<CreateArticleImageDTO> getArticleImages() {
-//        return articleImages;
-//    }
-//
-//    public void setArticleImages(Set<CreateArticleImageDTO> articleImages) {
-//        this.articleImages = articleImages;
-//    }
 }
