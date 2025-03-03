@@ -39,7 +39,6 @@ export default function Signin() {
     console.log("Updated user data:", currentUser);
   }, [currentUser]);
 
-  // Validate form on data change, but only show errors for touched fields
   useEffect(() => {
     const validationErrors = validateLoginForm(
       signInData.email,
@@ -51,7 +50,6 @@ export default function Signin() {
   async function handleLogInFormSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Mark all fields as touched
     setTouched({
       email: true,
       password: true,

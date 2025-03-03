@@ -5,10 +5,11 @@ import { Bookmark, MessageCircle, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardFooter, CardHeader } from "./ui/card";
-import { GetArticles } from "@/Interfaces/UserContextInterface";
+import { GetArticles } from "@/Interfaces/Interfaces";
 import { deleteBoomark, getAllBoomarks } from "@/services/BookMarksService";
 import { useRouter } from "next/navigation";
 import Footer from "./Footer";
+import { extractFirstImage } from "@/utills/extractFunction";
 
 export default function BookmarksPageComponent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,24 +35,6 @@ export default function BookmarksPageComponent() {
     router.push(`/articles/${articleId}`);
   }
 
-  function extractFirstImage(htmlContent: string) {
-    try {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = htmlContent;
-      const firstImg = tempDiv.querySelector("img");
-      //  console.log("the selected category is : ", selectedCategory)
-
-      if (firstImg) {
-        return firstImg.src;
-      }
-
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    } catch (error) {
-      console.error("Error extracting image:", error);
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    }
-  }
-
   function handleBookMarkClick(
     articleId: number,
     e: React.MouseEvent<HTMLButtonElement>
@@ -61,9 +44,9 @@ export default function BookmarksPageComponent() {
     deleteBoomark(articleId)
       .then((response) => {
         console.log(response);
-        setBookMarksData(prevData => {
+        setBookMarksData((prevData) => {
           if (!prevData) return null;
-          return prevData.filter(article => article.id !== articleId);
+          return prevData.filter((article) => article.id !== articleId);
         });
       })
       .catch((err) => {

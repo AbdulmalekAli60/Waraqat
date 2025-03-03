@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { getAllFollowingInterface } from "@/Interfaces/UserContextInterface";
+import { FollowDialogProps, getAllFollowingInterface } from "@/Interfaces/Interfaces";
 import {
   follow,
   getFollowers,
@@ -12,12 +12,6 @@ import { Button } from "./ui/button";
 import { useFollow } from "@/context/FollowContext";
 import { useRouter } from "next/navigation";
 
-interface FollowDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  userId: string | number | string[] | null;
-  initialTab: "following" | "followers";
-}
 
 export default function FollowDialog({
   isOpen,
@@ -30,27 +24,7 @@ export default function FollowDialog({
     initialTab
   );
   const [isVisible, setIsVisible] = useState(false);
-  // const [allFollowing, setAllFollowing] = useState<getAllFollowingInterface[]>([
-  //   {
-  //     id: 0,
-  //     username: "",
-  //     name: "",
-  //     profileImage: undefined,
-  //     following: false,
-  //   },
-  // ]);
-
   const [users, setUsers] = useState<getAllFollowingInterface[]>([]);
-
-  // const [allFollowers, setAllFollowers] = useState<getAllFollowingInterface[]>([
-  //   {
-  //     id: 0,
-  //     username: "",
-  //     name: "",
-  //     profileImage: undefined,
-  //     following: false,
-  //   },
-  // ]);
   const { setFollowersCount, setFollowingCount } = useFollow();
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -174,42 +148,42 @@ export default function FollowDialog({
             </div>
           ) : (
             <div className="space-y-4 pb-4">
-             {users.map((user) => (
-  <div
-    key={user.userId}
-    className="bg-white border rounded-lg shadow-sm"
-  >
-    <div className="flex items-center justify-between p-4">
-      {/* Clickable user info area */}
-      <div 
-        onClick={() => handleUserCardClick(user?.userId, user)}
-        className="flex items-center gap-3 flex-1 cursor-pointer"
-      >
-        <div className="h-9 w-9 rounded-full overflow-hidden bg-gray-200">
-          <img
-            src={user?.profileImage}
-            alt={`User ${user.name}`}
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <span className="font-medium">{user.username}</span>
-      </div>
-      
-      {/* Separate non-clickable button area */}
-      <div className="flex-none">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleFollowUnfollowClickInCard(user);
-          }}
-          variant={user.following ? "danger" : "follow"}
-        >
-          {user.following ? "Unfollow" : "Follow"}
-        </Button>
-      </div>
-    </div>
-  </div>
-))}
+              {users.map((user) => (
+                <div
+                  key={user.userId}
+                  className="bg-white border rounded-lg shadow-sm"
+                >
+                  <div className="flex items-center justify-between p-4">
+                    {/* Clickable user info area */}
+                    <div
+                      onClick={() => handleUserCardClick(user?.userId, user)}
+                      className="flex items-center gap-3 flex-1 cursor-pointer"
+                    >
+                      <div className="h-9 w-9 rounded-full overflow-hidden bg-gray-200">
+                        <img
+                          src={user?.profileImage}
+                          alt={`User ${user.name}`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <span className="font-medium">{user.username}</span>
+                    </div>
+
+                    {/* Separate non-clickable button area */}
+                    <div className="flex-none">
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFollowUnfollowClickInCard(user);
+                        }}
+                        variant={user.following ? "danger" : "follow"}
+                      >
+                        {user.following ? "Unfollow" : "Follow"}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

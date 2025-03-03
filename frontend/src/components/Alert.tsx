@@ -1,11 +1,7 @@
 import { X } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
+import { AlertProps } from "@/Interfaces/Interfaces";
 
-interface AlertProps {
-  alertColor: string;
-  alertMessage: string;
-  show: boolean;
-}
 export function Alert({ alertColor, alertMessage, show }: AlertProps) {
   const { hideAlert } = useAlert();
 

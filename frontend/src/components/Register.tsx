@@ -44,7 +44,7 @@ export default function Register() {
     console.log("register user data:", currentUser);
   }, [currentUser]);
 
-  // Validate form on data change, but only show errors for touched fields
+
   useEffect(() => {
     const validationErrors = validateRegisterForm(
       registerData.name,
@@ -76,7 +76,6 @@ export default function Register() {
   async function handleRegisterFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     
-    // Mark all fields as touched
     setTouched({
       name: true,
       username: true,
@@ -84,7 +83,6 @@ export default function Register() {
       password: true,
     });
 
-    // Validate all fields before submission
     const validationErrors = validateRegisterForm(
       registerData.name,
       registerData.username,
@@ -92,7 +90,6 @@ export default function Register() {
       registerData.password
     );
     
-    // If there are errors, don't submit
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;

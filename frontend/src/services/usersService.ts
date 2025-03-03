@@ -3,22 +3,11 @@ import {
   getAllUsersInterface,
   UpdatedProfileData,
   UserDataInterface,
-} from "@/Interfaces/UserContextInterface";
+} from "@/Interfaces/Interfaces";
+import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
 
-
-
 const url = "http://localhost:8080/users";
-
-function getAuthHeaderWithToken() {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    throw new Error("No authentication token found");
-  }
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-}
 
 export const getUserWithId = (id: number) => {
   return axios.get(`${url}/specificUser/${id}`, {
@@ -43,6 +32,8 @@ export const deleteAccount = () => {
   });
 };
 
-export const getAllUsers = (): Promise<AxiosResponse<getAllUsersInterface[]>> => {
-  return axios.get(`${url}/allUsers`, {headers: getAuthHeaderWithToken()})
-}
+export const getAllUsers = (): Promise<
+  AxiosResponse<getAllUsersInterface[]>
+> => {
+  return axios.get(`${url}/allUsers`, { headers: getAuthHeaderWithToken() });
+};

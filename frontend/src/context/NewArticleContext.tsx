@@ -1,12 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useUserInfo } from "./UserContext";
-import { ArticleInterface } from "@/Interfaces/UserContextInterface";
-
-interface ArticleContextType {
-  newArticleData: ArticleInterface;
-  setNewArticleData: React.Dispatch<React.SetStateAction<ArticleInterface>>;
-}
+import { ArticleContextType, ArticleInterface } from "@/Interfaces/Interfaces";
 
 const NewArticleContext = createContext<ArticleContextType | undefined>(
   undefined
@@ -24,14 +19,13 @@ export function NewArticleContextProvider({
     content: "",
     userId: currentUser.id || 0,
     categoryId: 0,
-    // articleImages: [{ imageURL: "" }],
   });
 
   useEffect(() => {
     if (currentUser?.id) {
-      setNewArticleData(prev => ({
+      setNewArticleData((prev) => ({
         ...prev,
-        userId: currentUser.id
+        userId: currentUser.id,
       }));
     }
   }, [currentUser]);

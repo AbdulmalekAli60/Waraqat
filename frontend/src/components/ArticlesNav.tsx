@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React from "react";
 import DropDown_menu from "@/components/AvatarDropDown";
 import { Button } from "./ui/button";
@@ -8,11 +8,6 @@ export default function ArticlesNav() {
   const router = useRouter();
   const pathName = usePathname();
   function handlePage() {
-    // const token = sessionStorage.getItem("token");
-
-    // if (token){
-    //   router.push("/Home");
-    // }
     router.push("/articles");
   }
   return (

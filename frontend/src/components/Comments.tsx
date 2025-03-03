@@ -16,7 +16,7 @@ import {
   CommentsInterface,
   writeCommentInterface,
   writeCommentResponse,
-} from "@/Interfaces/UserContextInterface";
+} from "@/Interfaces/Interfaces";
 import {
   deleteComment,
   getAllCommentsWithArticleId,
@@ -41,7 +41,7 @@ export function Comments({
     userId: currentUser.id,
     content: "",
   });
-  const router = useRouter()
+  const router = useRouter();
 
   // event handlers
   function handleSubmitComment() {
@@ -80,15 +80,12 @@ export function Comments({
     deleteComment(commentId)
       .then((response) => {
         console.log(response.data);
-
-        // Filter out the deleted comment from the comments array
         setComments((prevComments) =>
           prevComments
             ? prevComments.filter((comment) => comment.id !== commentId)
             : null
         );
 
-        // Update the comment count in the parent component
         setCommentCount((prevArticle) => {
           if (!prevArticle) return null;
 
@@ -103,10 +100,13 @@ export function Comments({
       });
   }
 
-  function handleCardClick(e:React.MouseEvent<HTMLDivElement, MouseEvent>, userId:number){
+  function handleCardClick(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    userId: number
+  ) {
     e.preventDefault();
-    e.stopPropagation()
-    router.push(`/profile/${userId}`)
+    e.stopPropagation();
+    router.push(`/profile/${userId}`);
   }
   // event handlers
 
@@ -161,7 +161,7 @@ export function Comments({
           {comments?.map((comment) => (
             <div
               key={comment.id}
-              onClick={(e) => handleCardClick(e,comment.userId)}
+              onClick={(e) => handleCardClick(e, comment.userId)}
               className="mb-4 rounded-lg border p-3 relative cursor-pointer"
             >
               <div className="flex justify-between items-start">
@@ -190,12 +190,13 @@ export function Comments({
                 </div>
 
                 <Button
-                  
                   onClick={(e) => {
                     handleCommentDelete(e, comment.id);
                   }}
                   variant={"ghost"}
-                  className={`p-1 h-8 ${currentUser.id !== comment.userId ? "hidden" : ""}`}
+                  className={`p-1 h-8 ${
+                    currentUser.id !== comment.userId ? "hidden" : ""
+                  }`}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

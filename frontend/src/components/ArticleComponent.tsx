@@ -1,17 +1,10 @@
 "use client";
 
-import { GetArticles } from "@/Interfaces/UserContextInterface";
+import { GetArticles } from "@/Interfaces/Interfaces";
 import { getArticleById, incrementLike } from "@/services/ArticlesService";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {
-  // MessageCircle,
-  Timer,
-  ThumbsUp,
-  User,
-  BookOpen,
-  Bookmark,
-} from "lucide-react";
+import { Timer, ThumbsUp, User, BookOpen, Bookmark } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Separator } from "./ui/separator";
@@ -194,7 +187,7 @@ export default function ArticleComponent() {
 
           <div className="flex items-center gap-2">
             <Comments
-            setCommentCount={setSpecificArticle}
+              setCommentCount={setSpecificArticle}
               text="Comments"
               setOpen={setIsCommentsOpen}
               isOpen={isCommentsOpen}

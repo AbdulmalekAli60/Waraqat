@@ -1,19 +1,10 @@
 "use client";
 
-import { GetArticles } from "@/Interfaces/UserContextInterface";
+import { GetArticles } from "@/Interfaces/Interfaces";
+import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
 
 const url = "http://localhost:8080/bookmarks";
-
-function getAuthHeaderWithToken() {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    throw new Error("No authentication token found");
-  }
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-}
 
 export const addBooMark = (
   articleId: number

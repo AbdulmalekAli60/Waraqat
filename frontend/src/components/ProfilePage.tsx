@@ -10,10 +10,7 @@ import { MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { useUserInfo } from "@/context/UserContext";
-import {
-  GetArticles,
-  UserDataInterface,
-} from "@/Interfaces/UserContextInterface";
+import { GetArticles, UserDataInterface } from "@/Interfaces/Interfaces";
 import { useParams, useRouter } from "next/navigation";
 import { getUserWithId } from "@/services/usersService";
 import FollowDialog from "./FollowDialog";
@@ -24,17 +21,7 @@ import {
 import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
 import Footer from "./Footer";
 import { useAlert } from "@/context/AlertContext";
-
-// function Footer() {
-//   return (
-//     <footer className="w-full py-2 mt-auto border-t-2 border-black">
-//       <p className="font-bold text-sm sm:text-base text-center">
-//         @All Rights Reserved
-//       </p>
-//     </footer>
-//   );
-// }
-
+import { extractFirstImage } from "@/utills/extractFunction";
 export default function ProfilePage() {
   const { currentUser, setCurrentUser } = useUserInfo();
   const [isFollowDialogOpen, setIsFollowDialogOpen] = useState<boolean>(false);
@@ -90,12 +77,11 @@ export default function ProfilePage() {
     fetchData();
 
     return () => {
-      isMounted = false; // Prevent state updates on unmounted component
+      isMounted = false;
     };
   }, [id, currentUser]);
 
   useEffect(() => {
-    // Use the finalId instead of always using currentUser.id
     const userIdToFetch =
       typeof finalId === "string" ? parseInt(finalId, 10) : finalId;
 
@@ -109,48 +95,24 @@ export default function ProfilePage() {
           console.error(err);
         });
     }
-  }, [finalId]); // Add finalId as a dependency
+  }, [finalId]); 
 
   if (!profileUser) return <div>Loading...</div>;
 
   const isCurrentUser = !id || Number(id) === currentUser?.id;
 
   function handleFollowingClick() {
-    // get following (who i follow) done
     setDialogTab("following");
     setIsFollowDialogOpen(true);
   }
 
   function handleFollowersClick() {
-    // who follow me (get followers)
     setDialogTab("followers");
     setIsFollowDialogOpen(true);
   }
 
   function handleArticleClick(articleId: number) {
     router.push(`/articles/${articleId}`);
-  }
-
-  function extractFirstImage(htmlContent: string) {
-    try {
-      // Create a temporary DOM element to parse the HTML
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = htmlContent;
-
-      // Find the first image in the content
-      const firstImg = tempDiv.querySelector("img");
-
-      if (firstImg) {
-        // Get the src attribute (base64 or URL)
-        return firstImg.src;
-      }
-
-      // Return a default image if no image found
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    } catch (error) {
-      console.error("Error extracting image:", error);
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    }
   }
 
   function handleBookmarkClick(
@@ -190,7 +152,6 @@ export default function ProfilePage() {
       })
       .catch((err) => {
         console.error("Bookmark operation failed:", err);
-        // Don't update UI on error
       });
   }
 
@@ -318,7 +279,9 @@ export default function ProfilePage() {
                       <Button
                         variant={"ghost"}
                         onClick={(e) => handleDeleteClick(e, article?.id)}
-                        className={`${currentUser.id === finalId ? "": "hidden"}`}
+                        className={`${
+                          currentUser.id === finalId ? "" : "hidden"
+                        }`}
                       >
                         <Trash2 />
                         Delete Article

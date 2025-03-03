@@ -1,19 +1,10 @@
 "use client";
 
-import { getAllCategoriesInterface } from "@/Interfaces/UserContextInterface";
+import { getAllCategoriesInterface } from "@/Interfaces/Interfaces";
+import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
 
 const url = "http://localhost:8080/categories";
-
-function getAuthHeaderWithToken() {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    throw new Error("No authentication token found");
-  }
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-}
 
 export const getAllCategories = (): Promise<
   AxiosResponse<getAllCategoriesInterface[]>

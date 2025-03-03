@@ -5,11 +5,8 @@ import { Button } from "@/components/ui/button";
 import { deleteAccount } from "@/services/usersService";
 import { useUserInfo } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { DeleteDialogProps } from "@/Interfaces/Interfaces";
 
-interface DeleteDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-}
 export default function DeleteAccountAlertDialog({
   isOpen,
   onOpenChange,

@@ -1,19 +1,19 @@
 "use client";
 
-import { getAllCategoriesInterface } from "@/Interfaces/UserContextInterface";
+import { getAllCategoriesInterface, SelectedCategoryProps } from "@/Interfaces/Interfaces";
 import {
   getAllCategories,
   getCategoryById,
 } from "@/services/CategoriesService";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { useCreateNewArticle } from "@/context/NewArticleContext";
 
-interface SelectedCategoryProps {
-  setSelectedCategory?: Dispatch<SetStateAction<number>>;
-}
 
-export default function ArticlesCategories({ setSelectedCategory }: SelectedCategoryProps) {
+
+export default function ArticlesCategories({
+  setSelectedCategory,
+}: SelectedCategoryProps) {
   const [allCategories, setAllCategories] = useState<
     getAllCategoriesInterface[]
   >([
@@ -48,7 +48,7 @@ export default function ArticlesCategories({ setSelectedCategory }: SelectedCate
   }, []);
 
   function handleCategoryClick(categoryId: number) {
-    // If clicking the already selected category, unselect it (set to 0)
+    
     if (selectedCategoryId === categoryId) {
       setSelectedCategoryId(0);
       if (setSelectedCategory) {
@@ -56,17 +56,16 @@ export default function ArticlesCategories({ setSelectedCategory }: SelectedCate
       }
       setNewArticleData({ ...newArticleData, categoryId: 0 });
     } else {
-      // Otherwise, select the clicked category
+      
       setSelectedCategoryId(categoryId);
       if (setSelectedCategory) {
         setSelectedCategory(categoryId);
       }
       setNewArticleData({ ...newArticleData, categoryId: categoryId });
-      
+
       getCategoryById(categoryId)
         .then((response) => {
           console.log(response.data);
-
         })
         .catch((err) => {
           console.error(err);
@@ -78,7 +77,10 @@ export default function ArticlesCategories({ setSelectedCategory }: SelectedCate
     return <div className="text-sm text-gray-500">Loading categories...</div>;
   }
 
-  if (allCategories.length === 0 || (allCategories.length === 1 && allCategories[0].id === 0)) {
+  if (
+    allCategories.length === 0 ||
+    (allCategories.length === 1 && allCategories[0].id === 0)
+  ) {
     return <div className="text-sm text-gray-500">No categories available</div>;
   }
 
@@ -97,23 +99,26 @@ export default function ArticlesCategories({ setSelectedCategory }: SelectedCate
       >
         All
       </Badge>
-      
-      {allCategories.map((category) => (
-        category.id !== 0 && (
-          <Badge
-            key={category.id}
-            onClick={() => handleCategoryClick(category.id)}
-            variant={selectedCategoryId === category.id ? "default" : "outline"}
-            className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
-              selectedCategoryId === category.id
-                ? "bg-primary hover:bg-primary/90"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            {category.name}
-          </Badge>
-        )
-      ))}
+
+      {allCategories.map(
+        (category) =>
+          category.id !== 0 && (
+            <Badge
+              key={category.id}
+              onClick={() => handleCategoryClick(category.id)}
+              variant={
+                selectedCategoryId === category.id ? "default" : "outline"
+              }
+              className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                selectedCategoryId === category.id
+                  ? "bg-primary hover:bg-primary/90"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              {category.name}
+            </Badge>
+          )
+      )}
     </div>
   );
 }

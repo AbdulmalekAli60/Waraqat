@@ -1,10 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  GetArticles,
-  getAllUsersInterface,
-} from "@/Interfaces/UserContextInterface";
+import { GetArticles, getAllUsersInterface } from "@/Interfaces/Interfaces";
 import { getAllUsers } from "@/services/usersService";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
@@ -17,6 +14,7 @@ import { Bookmark, MessageCircle, User, Clock } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { addBooMark, deleteBoomark } from "@/services/BookMarksService";
 import Footer from "./Footer";
+import { extractFirstImage } from "@/utills/extractFunction";
 
 export default function ArticlesPageComponent() {
   const router = useRouter();
@@ -30,7 +28,6 @@ export default function ArticlesPageComponent() {
       doIFollowThisUser: false,
     },
   ]);
-  
 
   const [articlesData, setArticlesData] = useState<GetArticles[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,24 +105,24 @@ export default function ArticlesPageComponent() {
   ) {
     e.preventDefault();
     e.stopPropagation();
-  
+
     const currentArticle = articlesData?.find(
       (article) => article.id === articleId
     );
-  
+
     if (!currentArticle) return;
-  
+
     const apiCall = currentArticle.bookmarked
       ? deleteBoomark(articleId)
       : addBooMark(articleId);
-  
+
     apiCall
       .then((response) => {
         console.log(response);
-  
+
         setArticlesData((prevArticles) => {
           if (!prevArticles) return null;
-  
+
           return prevArticles.map((article) => {
             if (article.id === articleId) {
               return {
@@ -136,15 +133,13 @@ export default function ArticlesPageComponent() {
                   : (article.bookmarksCount || 0) + 1,
               };
             }
-  
+
             return article;
           });
         });
       })
       .catch((err) => {
-        // Improve error handling here
         console.error("Bookmark operation failed:", err);
-        // Don't update the UI state if there was an error
       });
   }
 
@@ -154,24 +149,6 @@ export default function ArticlesPageComponent() {
 
   function handleArticleClick(articleId: number) {
     router.push(`/article/${articleId}`);
-  }
-
-  function extractFirstImage(htmlContent: string) {
-    try {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = htmlContent;
-      const firstImg = tempDiv.querySelector("img");
-      console.log("the selected category is : ", selectedCategory);
-
-      if (firstImg) {
-        return firstImg.src;
-      }
-
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    } catch (error) {
-      console.error("Error extracting image:", error);
-      return "https://miro.medium.com/v2/resize:fit:2000/format:webp/1*3XS-8r8adjnRoNH4YjKXpw.png";
-    }
   }
 
   function formatDate(dateString: string) {

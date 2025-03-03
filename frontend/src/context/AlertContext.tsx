@@ -1,12 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import {Alert} from '../components/Alert';
-interface AlertContextType {
-  showAlert: (message: string, color: string) => void;
-  hideAlert: () => void;
-  isVisible: boolean;
-  message: string;
-  color: string;
-}
+import { AlertContextType } from '@/Interfaces/Interfaces';
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
 

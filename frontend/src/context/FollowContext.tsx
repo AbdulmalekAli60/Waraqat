@@ -1,12 +1,6 @@
 // contexts/FollowContext.tsx
+import { FollowContextType } from '@/Interfaces/Interfaces';
 import React, { createContext, useContext, useState } from 'react';
-
-interface FollowContextType {
-  followersCount: number;
-  followingCount: number;
-  setFollowersCount: (count: number) => void;
-  setFollowingCount: (count: number) => void;
-}
 
 const FollowContext = createContext<FollowContextType | undefined>(undefined);
 

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface UserDataInterface {
   id: number;
   username: string;
@@ -109,4 +111,56 @@ export interface CommentsInterface {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   setCommentCount: React.Dispatch<React.SetStateAction<GetArticles | null>>
+}
+
+export interface AlertProps {
+  alertColor: string;
+  alertMessage: string;
+  show: boolean;
+}
+
+export interface AlertContextType {
+  showAlert: (message: string, color: string) => void;
+  hideAlert: () => void;
+  isVisible: boolean;
+  message: string;
+  color: string;
+}
+
+export interface FollowContextType {
+  followersCount: number;
+  followingCount: number;
+  setFollowersCount: (count: number) => void;
+  setFollowingCount: (count: number) => void;
+}
+
+export interface ArticleContextType {
+  newArticleData: ArticleInterface;
+  setNewArticleData: React.Dispatch<React.SetStateAction<ArticleInterface>>;
+}
+
+export interface FollowDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  userId: string | number | string[] | null;
+  initialTab: "following" | "followers";
+}
+
+export interface UserResponseData {
+  id: number;
+  username: string;
+  email: string;
+  name: string;
+  bio: string;
+  profileImage: string;
+  created_at: string;
+}
+
+export interface DeleteDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export interface SelectedCategoryProps {
+  setSelectedCategory?: Dispatch<SetStateAction<number>>;
 }
