@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true, // Ignore ESLint errors during build
   },
   // Important for static HTML generation
-  output: 'export',
+  // output: 'export',
   // Enable importing JSON files
   webpack(config) {
     config.module.rules.push({
