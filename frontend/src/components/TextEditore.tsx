@@ -3,6 +3,21 @@
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 
+// Define proper types for Froala Editor
+interface FroalaEditorInstance {
+  html: {
+    get: () => string;
+    set: (content: string) => void;
+  };
+  // Add other methods you might need
+}
+
+// Define props interface
+interface TextEditorProps {
+  onContentChange: (content: string) => void;
+  initialContent?: string;
+}
+
 const FroalaEditor = dynamic(
   async () => {
     const values = await Promise.all([
@@ -11,10 +26,7 @@ const FroalaEditor = dynamic(
       import("froala-editor/css/froala_style.min.css"),
       import("froala-editor/js/plugins/image.min.js"),
       import("froala-editor/js/plugins/char_counter.min.js"),
-      // import("froala-editor/js/plugins/code_view.min.js"),
       import("froala-editor/js/plugins/save.min.js"),
-      // import("froala-editor/js/plugins/markdown.min.js"),
-      // import("froala-editor/js/plugins/code_beautifier.min.js"),
     ]);
     return values[0].default;
   },
@@ -31,10 +43,10 @@ const FroalaEditorView = dynamic(
   { ssr: false }
 );
 
-export default function TextEditor({ onContentChange, initialContent = "" }) {
+export default function TextEditor({ onContentChange, initialContent = "" }: TextEditorProps) {
   const [model, setModel] = useState(initialContent);
   const [isClient, setIsClient] = useState(false);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<FroalaEditorInstance | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -43,7 +55,16 @@ export default function TextEditor({ onContentChange, initialContent = "" }) {
       setModel(savedContent);
       onContentChange(savedContent);
     }
-  }, []);
+  }, [onContentChange]);  
+
+
+  useEffect(() => {
+   
+    const savedContent = localStorage.getItem("savedHtml");
+    if (savedContent) {
+      onContentChange(savedContent);
+    }
+  }, [onContentChange]);
 
   const handleModelChange = (content: string) => {
     setModel(content);
@@ -84,10 +105,10 @@ export default function TextEditor({ onContentChange, initialContent = "" }) {
                 buttons: ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'lineHeight', 'outdent', 'indent', 'quote'],
               },
               moreRich: {
-                buttons: [ 'insertImage',  'insertHR', 'emoticons', 'specialCharacters'],
+                buttons: ['insertImage', 'insertHR', 'emoticons', 'specialCharacters'],
               },
               moreMisc: {
-                buttons: ['undo', 'redo' ,'selectAll'],
+                buttons: ['undo', 'redo', 'selectAll'],
                 align: 'right',
                 buttonsVisible: 2,
               }
@@ -96,7 +117,7 @@ export default function TextEditor({ onContentChange, initialContent = "" }) {
               "charCounter.exceeded": function() {
                 alert("You have reached the maximum number of characters");
               },
-              'initialized': function() {
+              'initialized': function(this: FroalaEditorInstance) {
                 editorRef.current = this;
               }
             },
