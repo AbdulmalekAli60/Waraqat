@@ -1,4 +1,4 @@
-import ArticlesLayout from '@/app/layouts/ArticlesLayout'
+// import ArticlesLayout from '@/app/layouts/ArticlesLayout'
 import ArticleComponent from '@/components/ArticleComponent'
 import React from 'react'
 
@@ -7,8 +7,8 @@ export const metadata = {
 }
 export default function page() {
   return (
-   <ArticlesLayout>
+  //  <ArticlesLayout>
     <ArticleComponent/>
-   </ArticlesLayout>
+  //  </ArticlesLayout>
   )
 }

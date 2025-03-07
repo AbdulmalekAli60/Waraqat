@@ -78,9 +78,8 @@ export default function Signin() {
 
       setCurrentUser(userData);
      
-      setTimeout(() => {
-        router.push("/articles");
-      }, 300);
+        router.push(`/articles`);
+      
       console.log("Token stored:", !!sessionStorage.getItem("token"));
       console.log("User data stored:", !!sessionStorage.getItem("userData"));
     } catch (error) {
