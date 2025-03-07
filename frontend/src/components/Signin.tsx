@@ -79,6 +79,8 @@ export default function Signin() {
       setCurrentUser(userData);
       if (userData) {
         router.push("/articles/");
+      }else {
+        throw new Error("Hi")
       }
     } catch (error) {
       console.error(error);
