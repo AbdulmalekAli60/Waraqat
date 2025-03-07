@@ -165,7 +165,7 @@ export default function ProfilePage() {
 
     deleteArticle(arrticleId)
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         showAlert("Article Deleted", "bg-green-500");
       })
       .catch((err) => {
