@@ -86,7 +86,7 @@ export default function FollowDialog({
               u.userId === user.userId ? { ...u, following: true } : u
             )
           );
-          console.log("follow done");
+          // console.log("follow done");
         }
       } else {
         const response = await unfollow(user?.userId);
@@ -96,7 +96,7 @@ export default function FollowDialog({
               u.userId === user.userId ? { ...u, following: false } : u
             )
           );
-          console.log("unfollow done");
+          // console.log("unfollow done");
         }
       }
     } catch (err) {
@@ -105,7 +105,7 @@ export default function FollowDialog({
   }
 
   function handleUserCardClick(id: number, user: getAllFollowingInterface) {
-    console.log(id, user);
+    // console.log(id, user);
     router.push(`/profile/${id}`);
   }
 

@@ -41,7 +41,7 @@ export default function Register() {
   const { currentUser, setCurrentUser } = useUserInfo();
 
   useEffect(() => {
-    console.log("register user data:", currentUser);
+    // console.log("register user data:", currentUser);
   }, [currentUser]);
 
 
@@ -103,7 +103,7 @@ export default function Register() {
 
       sessionStorage.setItem("userData", JSON.stringify(responseData));
 
-      console.log(response);
+      // console.log(response);
       setCurrentUser({
         ...currentUser,
         id: responseData.id,

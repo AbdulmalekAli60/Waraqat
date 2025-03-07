@@ -3,8 +3,9 @@
 import { ArticleInterface, GetArticles } from "@/Interfaces/Interfaces";
 import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
+// http://localhost:8080/
 
-const url = "http://localhost:8080/articles";
+const url = "https://spring-boot-app-latest-9uem.onrender.com/articles";
 
 export const createNewArticle = (articleData: ArticleInterface) => {
   return axios.post(`${url}/createArticle`, articleData, {

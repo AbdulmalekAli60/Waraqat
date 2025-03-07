@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useCreateNewArticle } from "@/context/NewArticleContext";
@@ -85,7 +86,7 @@ export default function WriteArticleComponent() {
       };
 
       const response = await createNewArticle(articleToSave);
-      console.log("Article saved successfully:", response);
+      // console.log("Article saved successfully:", response);
       showAlert("Article saved successfully", "bg-green-500")
 
       // Reset form

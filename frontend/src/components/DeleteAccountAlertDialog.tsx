@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React from "react";
 
@@ -19,7 +20,7 @@ export default function DeleteAccountAlertDialog({
 
     try {
       deleteAccount();
-      console.log("account with id: ", currentUser.id, " has been deleted");
+      // console.log("account with id: ", currentUser.id, " has been deleted");
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("userData");
       sessionStorage.clear();

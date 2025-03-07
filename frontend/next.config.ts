@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -15,14 +15,12 @@ const nextConfig: NextConfig = {
         hostname: "miro.medium.com",
       },
     ],
-    unoptimized: true, // Needed for static export
+    unoptimized: true, 
   },
   eslint: {
-    ignoreDuringBuilds: true, // Ignore ESLint errors during build
+    ignoreDuringBuilds: true, 
   },
-  // Important for static HTML generation
-  // output: 'export',
-  // Enable importing JSON files
+
   webpack(config) {
     config.module.rules.push({
       test: /\.json$/,

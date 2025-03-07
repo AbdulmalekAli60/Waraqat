@@ -6,8 +6,9 @@ import {
 } from "@/Interfaces/Interfaces";
 import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
+// http://localhost:8080/
 
-const url = "http://localhost:8080/comments";
+const url = "https://spring-boot-app-latest-9uem.onrender.com/comments";
 
 export const writeComment = (
   commentData: writeCommentInterface

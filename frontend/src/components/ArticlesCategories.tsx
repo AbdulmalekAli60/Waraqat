@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { getAllCategoriesInterface, SelectedCategoryProps } from "@/Interfaces/Interfaces";
@@ -40,7 +41,7 @@ export default function ArticlesCategories({
         );
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -65,7 +66,7 @@ export default function ArticlesCategories({
 
       getCategoryById(categoryId)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch((err) => {
           console.error(err);

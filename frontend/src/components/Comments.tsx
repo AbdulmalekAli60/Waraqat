@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +49,7 @@ export function Comments({
     if (newComment && newComment.content && newComment.articleId) {
       writeComment(newComment)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
 
           setNewComment({ ...newComment, content: "" });
 
@@ -79,7 +80,7 @@ export function Comments({
     e.stopPropagation();
     deleteComment(commentId)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setComments((prevComments) =>
           prevComments
             ? prevComments.filter((comment) => comment.id !== commentId)

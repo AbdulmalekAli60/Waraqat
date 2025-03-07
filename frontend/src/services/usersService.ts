@@ -6,8 +6,9 @@ import {
 } from "@/Interfaces/Interfaces";
 import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
+// http://localhost:8080/
 
-const url = "http://localhost:8080/users";
+const url = "https://spring-boot-app-latest-9uem.onrender.com/users";
 
 export const getUserWithId = (id: number) => {
   return axios.get(`${url}/specificUser/${id}`, {

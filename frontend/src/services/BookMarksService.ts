@@ -3,8 +3,8 @@
 import { GetArticles } from "@/Interfaces/Interfaces";
 import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
-
-const url = "http://localhost:8080/bookmarks";
+// http://localhost:8080/
+const url = "https://spring-boot-app-latest-9uem.onrender.com/bookmarks";
 
 export const addBooMark = (
   articleId: number

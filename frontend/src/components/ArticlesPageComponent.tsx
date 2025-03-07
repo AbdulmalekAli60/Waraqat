@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -118,7 +119,7 @@ export default function ArticlesPageComponent() {
 
     apiCall
       .then((response) => {
-        console.log(response);
+        // console.log(response);
 
         setArticlesData((prevArticles) => {
           if (!prevArticles) return null;

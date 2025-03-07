@@ -92,9 +92,9 @@ export default function EditProfile() {
 
       setCurrentUser(updatedUser);
 
-      console.log("the response: ", response.data);
+      // console.log("the response: ", response.data);
 
-      console.log("updated data: ", updatedProfileData);
+      // console.log("updated data: ", updatedProfileData);
       showAlert("Updated", "bg-green-500");
     } catch (error) {
       console.error(error);

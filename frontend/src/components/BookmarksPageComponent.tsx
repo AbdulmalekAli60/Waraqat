@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -43,7 +45,7 @@ export default function BookmarksPageComponent() {
     e.stopPropagation();
     deleteBoomark(articleId)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setBookMarksData((prevData) => {
           if (!prevData) return null;
           return prevData.filter((article) => article.id !== articleId);
@@ -64,67 +66,79 @@ export default function BookmarksPageComponent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 mt-2 gap-6 max-w-7xl mx-auto mb-6">
-            {bookmarksData?.map((article) => (
-              <Card
-                onClick={() => handleArticleClick(article.id)}
-                key={article.id}
-                className="h-full shadow-md hover:shadow-lg transition-shadow duration-200"
-              >
-                <CardHeader className="p-4 space-y-2">
-                  {/* Article title */}
+            {bookmarksData && bookmarksData.length > 0 ? (
+              bookmarksData.map((article) => (
+                <Card
+                  onClick={() => handleArticleClick(article.id)}
+                  key={article.id}
+                  className="h-full shadow-md hover:shadow-lg transition-shadow duration-200"
+                >
+                  <CardHeader className="p-4 space-y-2">
+                    {/* Article title */}
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => handleArticleClick(article.id)}
+                    >
+                      <h3 className="text-xl font-bold line-clamp-2">
+                        {article.title}
+                      </h3>
+                    </div>
+
+                    {/* Author and date */}
+                    <div className="flex items-center text-sm text-gray-500 gap-2">
+                      <User size={14} />
+                      <span>{article.userName}</span>
+                    </div>
+                  </CardHeader>
+
+                  {/* Article image */}
                   <div
-                    className="cursor-pointer"
+                    className="relative w-full h-48 overflow-hidden mb-2 cursor-pointer"
                     onClick={() => handleArticleClick(article.id)}
                   >
-                    <h3 className="text-xl font-bold line-clamp-2">
-                      {article.title}
-                    </h3>
-                  </div>
-
-                  {/* Author and date */}
-                  <div className="flex items-center text-sm text-gray-500 gap-2">
-                    <User size={14} />
-                    <span>{article.userName}</span>
-                  </div>
-                </CardHeader>
-
-                {/* Article image */}
-                <div
-                  className="relative w-full h-48 overflow-hidden mb-2 cursor-pointer"
-                  onClick={() => handleArticleClick(article.id)}
-                >
-                  <img
-                    loading="lazy"
-                    alt="article-image"
-                    src={extractFirstImage(article?.content)}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <CardFooter className="flex justify-between p-4 pt-0">
-                  <Button
-                    variant="ghost"
-                    disabled
-                    className="flex items-center gap-1"
-                    size="sm"
-                  >
-                    <MessageCircle size={16} />
-                    <span>{article.commentsCount}</span>
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    onClick={(e) => handleBookMarkClick(article.id, e)}
-                    size="sm"
-                  >
-                    <Bookmark
-                      fill={article.bookmarked ? "black" : ""}
-                      size={16}
+                    <img
+                      loading="lazy"
+                      alt="article-image"
+                      src={extractFirstImage(article?.content)}
+                      className="w-full h-full object-cover"
                     />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                  </div>
+
+                  <CardFooter className="flex justify-between p-4 pt-0">
+                    <Button
+                      variant="ghost"
+                      disabled
+                      className="flex items-center gap-1"
+                      size="sm"
+                    >
+                      <MessageCircle size={16} />
+                      <span>{article.commentsCount}</span>
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      onClick={(e) => handleBookMarkClick(article.id, e)}
+                      size="sm"
+                    >
+                      <Bookmark
+                        fill={article.bookmarked ? "black" : ""}
+                        size={16}
+                      />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10">
+                <Bookmark size={40} className="mx-auto text-gray-400 mb-4" />
+                <h3 className="text-xl font-medium text-gray-700">
+                  No bookmarks found
+                </h3>
+                <p className="text-gray-500 mt-2">
+                  You haven't bookmarked any articles yet.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>

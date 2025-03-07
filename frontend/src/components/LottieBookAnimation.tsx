@@ -3,8 +3,6 @@
 import React, { useRef, useEffect } from "react";
 import lottie from "lottie-web";
 
-// Import the animation data directly in the component
-// We'll create a safer way to import the JSON
 export default function LottieBookAnimation() {
   const container = useRef<HTMLDivElement>(null);
   const animationInstance = useRef<ReturnType<typeof lottie.loadAnimation> | null>(null);

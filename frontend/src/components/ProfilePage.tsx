@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -89,7 +90,7 @@ export default function ProfilePage() {
       getArticleWithUserId(userIdToFetch)
         .then((response) => {
           setArticlesData(response.data);
-          console.log("all articles with user id: ", response.data);
+          // console.log("all articles with user id: ", response.data);
         })
         .catch((err) => {
           console.error(err);
@@ -133,7 +134,7 @@ export default function ProfilePage() {
 
     apiCall
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setArticlesData((prevArticles) => {
           if (!prevArticles) return null;
           return prevArticles.map((article) => {
@@ -164,7 +165,7 @@ export default function ProfilePage() {
 
     deleteArticle(arrticleId)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         showAlert("Article Deleted", "bg-green-500");
       })
       .catch((err) => {

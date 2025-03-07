@@ -3,8 +3,9 @@
 import { getAllFollowingInterface } from "@/Interfaces/Interfaces";
 import { getAuthHeaderWithToken } from "@/utills/getAuthToken";
 import axios, { AxiosResponse } from "axios";
+// http://localhost:8080/
 
-const url = "http://localhost:8080/followManagement";
+const url = "https://spring-boot-app-latest-9uem.onrender.com/followManagement";
 
 export const follow = (id: number | string) => {
   return axios.post(

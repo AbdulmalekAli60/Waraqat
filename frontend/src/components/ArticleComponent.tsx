@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { GetArticles } from "@/Interfaces/Interfaces";
@@ -86,7 +87,7 @@ export default function ArticleComponent() {
     if (specificArticle.bookmarked) {
       deleteBoomark(articleId)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
 
           setSpecificArticle({
             ...specificArticle,
@@ -100,7 +101,7 @@ export default function ArticleComponent() {
     } else {
       addBooMark(articleId)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
 
           setSpecificArticle({
             ...specificArticle,

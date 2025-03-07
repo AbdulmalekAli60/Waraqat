@@ -36,7 +36,7 @@ export default function Signin() {
   const { currentUser, setCurrentUser } = useUserInfo();
 
   useEffect(() => {
-    console.log("Updated user data:", currentUser);
+    // console.log("Updated user data:", currentUser);
   }, [currentUser]);
 
   useEffect(() => {
@@ -56,16 +56,16 @@ export default function Signin() {
     });
 
     // Validate all fields before submission
-    // const validationErrors = validateLoginForm(
-    //   signInData.email,
-    //   signInData.password
-    // );
-    
-    // If there are errors, don't submit
-    // if (Object.keys(validationErrors).length > 0) {
-    //   setErrors(validationErrors);
-    //   return;
-    // }
+    const validationErrors = validateLoginForm(
+      signInData.email,
+      signInData.password
+    );
+
+    // If there are errors, don not submit
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
     setIsLoading(true);
 
@@ -131,7 +131,9 @@ export default function Signin() {
                   name="email"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={`w-full ${touched.email && errors.email ? "border-red-500" : ""}`}
+                  className={`w-full ${
+                    touched.email && errors.email ? "border-red-500" : ""
+                  }`}
                 />
                 {touched.email && errors.email && (
                   <span className="text-red-600 text-sm">{errors.email}</span>
@@ -147,10 +149,14 @@ export default function Signin() {
                   name="password"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={`w-full ${touched.password && errors.password ? "border-red-500" : ""}`}
+                  className={`w-full ${
+                    touched.password && errors.password ? "border-red-500" : ""
+                  }`}
                 />
                 {touched.password && errors.password && (
-                  <span className="text-red-600 text-sm">{errors.password}</span>
+                  <span className="text-red-600 text-sm">
+                    {errors.password}
+                  </span>
                 )}
               </div>
 
@@ -160,7 +166,11 @@ export default function Signin() {
                   type="submit"
                   // disabled={isLoading || Object.keys(errors).length > 0}
                 >
-                  {isLoading ? <LoaderCircle className="animate-spin mr-2" /> : "Log in"}
+                  {isLoading ? (
+                    <LoaderCircle className="animate-spin mr-2" />
+                  ) : (
+                    "Log in"
+                  )}
                 </Button>
               </div>
             </form>

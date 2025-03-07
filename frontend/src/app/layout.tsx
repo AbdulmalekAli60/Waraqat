@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-sync-scripts */
 import "./globals.css";
 import { Metadata } from "next";
 import Providers from "./Providers";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "Waraqat | Read and Write Articles",
@@ -58,10 +58,14 @@ export default function RootLayout({
         <meta property="linkedin:image" content="https://waraqat-images-bucket.s3.me-south-1.amazonaws.com/Waraqat+Header.png" />
         <meta property="linkedin:author" content="Abdulmalek" />
         
-        <script
+        {/* <script
           crossOrigin="anonymous"
           src="//unpkg.com/react-scan/dist/auto.global.js"
-        />
+        /> */}
+
+          <GoogleAnalytics/>
+
+
       </head>
       <body>
         <Providers>{children}</Providers>
