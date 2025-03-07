@@ -3,7 +3,7 @@ import React from "react";
 import ArticlesLayout from "@/app/layouts/ArticlesLayout";
 
 export const metadata = {
-  title: "Articles",
+  title: "Articles"
 };
 export default function page() {
   return (

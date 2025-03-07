@@ -77,7 +77,7 @@ export default function Signin() {
       sessionStorage.setItem("userData", JSON.stringify(userData));
 
     setCurrentUser(userData);
-      
+    console.log("Redirecting to articles page");
       router.push("/articles");
     } catch (error) {
       console.error(error);
