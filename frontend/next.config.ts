@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-
+  output: 'standalone',
   typescript: {
     ignoreBuildErrors: true,
   },
   experimental: {
-    reactCompiler: true,
+    // reactCompiler: true,
   },
   images: {
     remotePatterns: [
