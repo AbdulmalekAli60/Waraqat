@@ -83,9 +83,7 @@ export default function Signin() {
   
       console.log("Authentication successful, redirecting to articles page...");
       
-      // Use direct browser navigation instead of Next.js router
-      // This is more reliable in production environments
-      window.location.href = '/articles';
+     router.push("/mainpage")
       
     } catch (error) {
       console.error("Login error:", error);

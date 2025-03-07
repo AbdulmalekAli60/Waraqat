@@ -8,7 +8,7 @@ export default function ArticlesNav() {
   const router = useRouter();
   const pathName = usePathname();
   function handlePage() {
-    router.push("/articles");
+    router.push("/mainpage");
   }
   return (
     <div>
