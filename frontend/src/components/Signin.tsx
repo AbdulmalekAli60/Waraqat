@@ -33,6 +33,7 @@ export default function Signin() {
   });
 
   const router = useRouter();
+  
   const { currentUser, setCurrentUser } = useUserInfo();
 
   useEffect(() => {
@@ -49,41 +50,45 @@ export default function Signin() {
 
   async function handleLogInFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+  
     setTouched({
       email: true,
       password: true,
     });
-
+  
     // Validate all fields before submission
     const validationErrors = validateLoginForm(
       signInData.email,
       signInData.password
     );
-
-    // If there are errors, don not submit
+  
+    // If there are errors, do not submit
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
       const response = await login(signInData);
       const userData = response.data.userData;
-
+  
+      // Store auth data in session storage
       sessionStorage.setItem("token", response.data.accessToken);
       sessionStorage.setItem("userData", JSON.stringify(userData));
-
+  
+      // Update context
       setCurrentUser(userData);
-     
-      router.replace("/articles")
+  
+      console.log("Authentication successful, redirecting to articles page...");
       
-      console.log("Token stored:", !!sessionStorage.getItem("token"));
-      console.log("User data stored:", !!sessionStorage.getItem("userData"));
+      // Use direct browser navigation instead of Next.js router
+      // This is more reliable in production environments
+      window.location.href = '/articles';
+      
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }

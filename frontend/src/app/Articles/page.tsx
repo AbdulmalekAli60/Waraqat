@@ -6,6 +6,7 @@ export const metadata = {
   title: "Articles"
 };
 export default function page() {
+  console.log("Articles page component rendering");
   return (
     <ArticlesLayout>
       <ArticlesPageComponent />
