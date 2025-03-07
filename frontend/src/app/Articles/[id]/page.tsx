@@ -3,7 +3,7 @@ import ArticleComponent from '@/components/ArticleComponent'
 import React from 'react'
 
 export const metadata = {
-  title:"Article"
+  title:"Articles"
 }
 export default function page() {
   return (
