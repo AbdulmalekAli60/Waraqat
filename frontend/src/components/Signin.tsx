@@ -78,7 +78,7 @@ export default function Signin() {
 
       setCurrentUser(userData);
      
-        router.push(`/articles`);
+      router.replace("/articles")
       
       console.log("Token stored:", !!sessionStorage.getItem("token"));
       console.log("User data stored:", !!sessionStorage.getItem("userData"));
