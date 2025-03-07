@@ -114,7 +114,7 @@ export default function Register() {
         created_at: responseData.created_at,
       });
 
-      router.push("/articles");
+      router.push("/articles/");
     } catch (error) {
       console.error(error);
     } finally {
