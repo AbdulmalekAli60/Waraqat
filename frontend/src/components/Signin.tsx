@@ -77,8 +77,10 @@ export default function Signin() {
       sessionStorage.setItem("userData", JSON.stringify(userData));
 
       setCurrentUser(userData);
-      console.log("Redirecting to articles page");
-      router.push("https://waraqat.vercel.app/articles");
+     
+      setTimeout(() => {
+        router.push("/articles");
+      }, 300);
       console.log("Token stored:", !!sessionStorage.getItem("token"));
       console.log("User data stored:", !!sessionStorage.getItem("userData"));
     } catch (error) {
