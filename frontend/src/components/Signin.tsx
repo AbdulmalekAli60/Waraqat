@@ -76,12 +76,9 @@ export default function Signin() {
       sessionStorage.setItem("token", response.data.accessToken);
       sessionStorage.setItem("userData", JSON.stringify(userData));
 
-      setCurrentUser(userData);
-      if (userData) {
-        router.push("/articles/");
-      }else {
-        throw new Error("Hi")
-      }
+    setCurrentUser(userData);
+      
+      router.push("/articles");
     } catch (error) {
       console.error(error);
     } finally {

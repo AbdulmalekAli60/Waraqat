@@ -5,7 +5,7 @@ import React from "react";
 export const metadata = {
   title: "Articles",
 };
-export default function ArticlesPage() {
+export default function page() {
   return (
     <ArticlesLayout>
       <ArticlesPageComponent />
