@@ -149,7 +149,7 @@ export default function ArticlesPageComponent() {
   }
 
   function handleArticleClick(articleId: number) {
-    router.push(`/article/${articleId}`);
+    router.push(`/articles/${articleId}`);
   }
 
   function formatDate(dateString: string) {

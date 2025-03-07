@@ -1,6 +1,6 @@
 import ArticlesPageComponent from "@/components/ArticlesPageComponent";
-import ArticlesLayout from "../layouts/ArticlesLayout";
 import React from "react";
+import ArticlesLayout from "@/app/layouts/ArticlesLayout";
 
 export const metadata = {
   title: "Articles",
