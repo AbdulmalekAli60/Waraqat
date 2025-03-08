@@ -9,6 +9,7 @@ This project started as a way for learning Spring Boot fundamentals and evolved 
 - Spring Boot
 - NextJS
 - TypeScript
+- Tailwind
 - MySQL
 - AWS RDS (DB Deployment)
 - Docker
